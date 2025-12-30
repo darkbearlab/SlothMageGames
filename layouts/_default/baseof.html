@@ -25,12 +25,14 @@
     <!-- 導覽列 -->
     <nav>
         <div class="logo">
-            <a href="{{ "/" | relURL }}">{{ .Site.Title }}</a>
+            <!-- 改用 .Site.Home.RelPermalink 確保指回專案首頁 -->
+            <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
         </div>
         <ul>
-            <!-- 這裡 relURL 會自動處理你的 repo 名稱路徑 -->
-            <li><a href="{{ "/" | relURL }}">首頁</a></li>
-            <li><a href="{{ "/posts" | relURL }}">所有文章</a></li>
+            <!-- 首頁連結修正 -->
+            <li><a href="{{ .Site.Home.RelPermalink }}">首頁</a></li>
+            <!-- 文章連結修正：加上 / 確保它是目錄 -->
+            <li><a href="{{ "posts/" | relURL }}">所有文章</a></li>
         </ul>
     </nav>
 
