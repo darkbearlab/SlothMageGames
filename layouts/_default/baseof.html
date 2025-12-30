@@ -4,75 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
-    <!-- 簡單的全站樣式 -->
+    
+    <!-- Google Analytics (如果你有設定的話) -->
+    {{ template "_internal/google_analytics.html" . }}
+
+    <!-- 引入 Google Fonts: Press Start 2P (像素字體) 與 Noto Sans TC (內文) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #333; line-height: 1.6; }
-        a { text-decoration: none; color: inherit; transition: 0.2s; }
-        a:hover { color: #666; }
+        /* --- 全站變數設定 --- */
+        :root {
+            --primary: #d946ef;     /* 魔法紫 (你的主題色) */
+            --bg-color: #f9f9f9;    /* 背景微灰，讓卡片更明顯 */
+            --nav-border: #333333;  /* 復古黑邊 */
+            --text-main: #333333;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif; 
+            color: var(--text-main); 
+            line-height: 1.6;
+            background-color: var(--bg-color);
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.15s; }
+
+        /* --- 導覽列設計 (Retro Game Style) --- */
+        nav { 
+            background: #ffffff;
+            border-bottom: 4px solid var(--nav-border); /* 厚實的底部線條，像遊戲介面 */
+            padding: 0.8rem 0;
+            position: sticky; /* 讓導覽列黏在頂部 */
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 0 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        /* LOGO 設計：像素風格 */
+        nav .logo a { 
+            font-family: 'Press Start 2P', cursive; /* 8-bit 字體 */
+            font-size: 0.85rem; 
+            color: #333;
+            line-height: 1.5;
+            text-shadow: 3px 3px 0px var(--primary); /* 復古硬陰影 */
+            display: inline-block;
+            padding: 5px 0;
+        }
         
-        /* 導覽列樣式 */
-        <nav>
-            <div class="logo">
-                <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
-            </div>
-            <ul>
-                <li><a href="{{ .Site.Home.RelPermalink }}">首頁</a></li>
-                <!-- 修改這裡：新增分類連結 -->
-                <li><a href="{{ "devlog/" | relURL }}">開發日誌</a></li>
-                <li><a href="{{ "stories/" | relURL }}">奇幻創作</a></li>
-                <li><a href="{{ "posts/" | relURL }}">雜談</a></li>
-                
-                <!-- 如果你有做作品集頁面 -->
-                <li><a href="{{ "projects/" | relURL }}">作品集</a></li>
-            </ul>
-        </nav>
+        nav .logo a:hover {
+            transform: scale(1.05) rotate(-1deg); /* 俏皮的晃動 */
+        }
+
+        /* 選單連結容器 */
+        nav ul { 
+            display: flex; 
+            gap: 12px; 
+            list-style: none; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* 按鈕連結樣式 */
+        nav li a { 
+            font-size: 0.95rem; 
+            font-weight: 700;
+            color: #555;
+            padding: 8px 16px;
+            border-radius: 8px; 
+            border: 2px solid transparent; /* 預留邊框位置 */
+            position: relative;
+        }
+
+        /* Hover 效果：變身成遊戲按鈕 */
+        nav li a:hover { 
+            background-color: #fff; 
+            color: var(--primary);
+            border: 2px solid #333;     /* 出現黑框 */
+            box-shadow: 4px 4px 0px #333; /* 出現立體陰影 */
+            transform: translate(-2px, -2px); /* 往左上浮起 */
+        }
         
-        /* 頁尾樣式 */
-        <footer>
-            <div style="margin-bottom: 10px;">
-                &copy; {{ now.Year }} {{ .Site.Title }}. Powered by Hugo.
-            </div>
-            
-            <!-- 版權聲明區塊 -->
-            <div style="font-size: 0.8rem; color: #999; line-height: 1.5;">
-                <p style="margin: 0;">
-                    本站內容採用 
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="color: #666; text-decoration: underline;">
-                        CC BY-NC 4.0 (姓名標示-非商業性)
-                    </a> 
-                    授權條款。
-                </p>
-                <p style="margin: 0;">引用或轉載請務必<strong>註明出處</strong>並附上原始連結。</p>
-            </div>
-        </footer>
+        /* 手機版 RWD 調整 */
+        @media (max-width: 700px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding-bottom: 0.5rem;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            nav li a {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+                background: #eee; /* 手機版給一點底色比較好按 */
+                border-radius: 20px;
+            }
+        }
+
+        /* --- 內容區塊 --- */
+        main {
+            min-height: 80vh; /* 確保內容少的時候頁尾也在下面 */
+            padding-top: 20px;
+        }
+
+        /* --- 頁尾樣式 --- */
+        footer { 
+            text-align: center; 
+            padding: 3rem 20px; 
+            background: #333; /* 改成深色頁尾，更有層次 */
+            color: #eee; 
+            font-size: 0.9rem; 
+            margin-top: 5rem; 
+            border-top: 4px solid var(--primary); /* 上緣加上魔法紫線條 */
+        }
+        
+        footer a { color: var(--primary); }
+        footer a:hover { text-decoration: underline; color: #fff; }
     </style>
 </head>
 <body>
     
     <!-- 導覽列 -->
     <nav>
-        <div class="logo">
-            <!-- 改用 .Site.Home.RelPermalink 確保指回專案首頁 -->
-            <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+        <div class="nav-container">
+            <div class="logo">
+                <a href="{{ .Site.Home.RelPermalink }}">
+                    {{ .Site.Title }}
+                </a>
+            </div>
+            <ul>
+                <!-- 這裡保留你之前的連結設定 -->
+                <li><a href="{{ .Site.Home.RelPermalink }}">首頁</a></li>
+                <li><a href="{{ "devlog/" | relURL }}">開發日誌</a></li>
+                <li><a href="{{ "stories/" | relURL }}">奇幻創作</a></li>
+                <li><a href="{{ "posts/" | relURL }}">雜談</a></li>
+                <!-- 如果有作品集 -->
+                <li><a href="{{ "projects/" | relURL }}">作品集</a></li>
+            </ul>
         </div>
-        <ul>
-            <!-- 首頁連結修正 -->
-            <li><a href="{{ .Site.Home.RelPermalink }}">首頁</a></li>
-            <!-- 文章連結修正：加上 / 確保它是目錄 -->
-            <li><a href="{{ "posts/" | relURL }}">所有文章</a></li>
-            <!-- 在 layouts/_default/baseof.html 的 <ul> 裡面加入 -->
-            <li><a href="{{ "projects/" | relURL }}">作品集</a></li>
-        </ul>
     </nav>
 
-    <!-- 這裡就是「挖洞」的地方，不同頁面會填入不同的內容 -->
+    <!-- 內容區塊 -->
     <main>
         {{ block "main" . }}{{ end }}
     </main>
 
     <!-- 頁尾 -->
     <footer>
-        &copy; {{ now.Year }} {{ .Site.Title }}. Powered by Hugo.
+        <div style="margin-bottom: 15px; font-family: 'Press Start 2P', cursive; font-size: 0.7rem;">
+            GAME OVER? CONTINUE?
+        </div>
+        
+        <div style="margin-bottom: 10px;">
+            &copy; {{ now.Year }} {{ .Site.Title }}. Powered by Hugo.
+        </div>
+        
+        <!-- 版權聲明 -->
+        <div style="font-size: 0.8rem; color: #bbb; line-height: 1.5; max-width: 600px; margin: 0 auto;">
+            <p style="margin: 0;">
+                本站內容採用 
+                <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">
+                    CC BY-NC 4.0
+                </a> 
+                授權條款。
+            </p>
+        </div>
     </footer>
 
 </body>
