@@ -1,3 +1,12 @@
+---
+title: "開發日誌"
+date: 2025-12-30T16:00:00+08:00
+draft: false
+categories: ["開發日誌"]
+
+description: "開發日誌"
+---
+
 *30, Dec.2025*
 ## 關於Code: Zero Front
 「代號：零號戰線」是一款通用於低強度、高壓力的近代~近未來單兵戰鬥情境的通用微縮模型戰棋遊戲，靈感取自Crossfire和Lion Rampant，但同時加入了作者許多自己的想法，讓規則更通用。
