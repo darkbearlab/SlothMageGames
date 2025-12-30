@@ -1,0 +1,4 @@
+baseURL = '[https://darkbearlab.github.io/SlothMageGames/]
+languageCode = 'zh-tw'
+title = '樹懶法師遊戲室/暗熊實驗室'
+theme = [] # 如果我們自己寫 layout，這裡可以留空或不寫
