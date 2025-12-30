@@ -42,7 +42,16 @@
 
 <!-- CSS 樣式微調 -->
 <style>
-    .content img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem 0; }
+    .content img { 
+        max-width: 100%; 
+        height: auto; 
+        border-radius: 8px; 
+        margin: 1.5rem 0;
+        
+        /* 這裡是關鍵！強制像素化渲染 */
+        image-rendering: pixelated;      /* Chrome, Safari, Newer standard */
+        image-rendering: crisp-edges;    /* Firefox */
+    }
     .content h2 { margin-top: 2.5rem; font-size: 1.8rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
     .content blockquote { background: #f9f9f9; padding: 1rem; border-left: 4px solid #ccc; }
     .content pre { background: #2d2d2d; color: #fff; padding: 1rem; border-radius: 8px; overflow-x: auto; }
