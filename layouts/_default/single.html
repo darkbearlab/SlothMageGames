@@ -36,6 +36,15 @@
         {{ end }}
 
         {{ .Content }}
+
+        <div style="margin-top: 4rem; padding: 1.5rem; background-color: #f9fafb; border-left: 5px solid #d946ef; border-radius: 4px; font-size: 0.9rem; color: #555;">
+            <p style="margin: 0 0 0.5rem 0; font-weight: bold; color: #333;">版權聲明</p>
+            <ul style="margin: 0; padding-left: 1.2rem; line-height: 1.6;">
+                <li><strong>文章作者：</strong>{{ .Params.author | default .Site.Title }}</li>
+                <li><strong>原始連結：</strong><a href="{{ .Permalink }}" style="color: #d946ef; word-break: break-all;">{{ .Permalink }}</a></li>
+                <li><strong>授權條款：</strong>本站內容採用 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="border-bottom: 1px dashed #999;">CC BY-NC 4.0</a> 授權，轉載請註明出處。</li>
+            </ul>
+        </div>
     </div>
 
 </article>
