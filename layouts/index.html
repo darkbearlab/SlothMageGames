@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div style="max-width: 800px; margin: 0 auto; padding: 2rem 20px;">
+    
+    <!-- 首頁的大標題區塊 (Hero) -->
+    <section style="text-align: center; margin: 3rem 0 5rem 0;">
+        <h1 style="font-size: 3.5rem; margin-bottom: 1rem; letter-spacing: -1px;">Sloth Mage Games</h1>
+        <p style="color: #666; font-size: 1.2rem;">歡迎來到這裡，這是關於遊戲開發與魔法的筆記。</p>
+    </section>
+
+    <!-- 文章列表區塊 -->
+    <section>
+        <h3 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: #999; margin-bottom: 2rem;">Latest Posts</h3>
+        
+        <!-- 迴圈：列出最新的文章 -->
+        {{ range .Site.RegularPages }}
+        <article style="margin-bottom: 3rem; display: flex; flex-direction: column; gap: 0.5rem;">
+            
+            <div style="font-size: 0.9rem; color: #888;">
+                {{ .Date.Format "2006.01.02" }}
+            </div>
+
+            <h2 style="font-size: 1.8rem; margin: 0; font-weight: 700;">
+                <a href="{{ .RelPermalink }}" style="color: #222;">{{ .Title }}</a>
+            </h2>
+
+            {{ if .Params.description }}
+            <p style="color: #555; margin: 0.5rem 0 1rem 0;">{{ .Params.description }}</p>
+            {{ end }}
+
+            <a href="{{ .RelPermalink }}" style="font-size: 0.95rem; font-weight: 600; color: #d946ef; display: inline-flex; align-items: center;">
+                閱讀全文 <span style="margin-left: 5px;">→</span>
+            </a>
+
+        </article>
+        <hr style="border: 0; border-top: 1px dashed #eee; margin: 2rem 0;">
+        {{ end }}
+    </section>
+
+</div>
+{{ end }}
