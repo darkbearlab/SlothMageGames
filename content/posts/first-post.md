@@ -4,7 +4,7 @@ date: 2025-12-30T11:37:00+08:00
 draft: false
 categories: ["網誌"]
 # 圖片檔案請放在 static/images/cover.jpg
-image: "[/images/sloth-mage-typing.png](https://raw.githubusercontent.com/darkbearlab/SlothMageGames/refs/heads/main/static/images/sloth-mage-typing.png)" 
+image: "https://raw.githubusercontent.com/darkbearlab/SlothMageGames/refs/heads/main/static/images/sloth-mage-typing.png" 
 description: "Github網誌的第一篇文章"
 ---
 
