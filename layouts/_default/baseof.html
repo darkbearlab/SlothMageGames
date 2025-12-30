@@ -11,10 +11,21 @@
         a:hover { color: #666; }
         
         /* 導覽列樣式 */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; max-width: 900px; margin: 0 auto; }
-        nav .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; }
-        nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
-        nav li a { font-size: 0.95rem; color: #555; }
+        <nav>
+            <div class="logo">
+                <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+            </div>
+            <ul>
+                <li><a href="{{ .Site.Home.RelPermalink }}">首頁</a></li>
+                <!-- 修改這裡：新增分類連結 -->
+                <li><a href="{{ "devlog/" | relURL }}">開發日誌</a></li>
+                <li><a href="{{ "stories/" | relURL }}">奇幻創作</a></li>
+                <li><a href="{{ "posts/" | relURL }}">雜談</a></li>
+                
+                <!-- 如果你有做作品集頁面 -->
+                <li><a href="{{ "projects/" | relURL }}">作品集</a></li>
+            </ul>
+        </nav>
         
         /* 頁尾樣式 */
         footer { text-align: center; padding: 3rem 0; color: #999; font-size: 0.85rem; margin-top: 4rem; border-top: 1px solid #eee; }
