@@ -28,7 +28,23 @@
         </nav>
         
         /* 頁尾樣式 */
-        footer { text-align: center; padding: 3rem 0; color: #999; font-size: 0.85rem; margin-top: 4rem; border-top: 1px solid #eee; }
+        <footer>
+            <div style="margin-bottom: 10px;">
+                &copy; {{ now.Year }} {{ .Site.Title }}. Powered by Hugo.
+            </div>
+            
+            <!-- 版權聲明區塊 -->
+            <div style="font-size: 0.8rem; color: #999; line-height: 1.5;">
+                <p style="margin: 0;">
+                    本站內容採用 
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="color: #666; text-decoration: underline;">
+                        CC BY-NC 4.0 (姓名標示-非商業性)
+                    </a> 
+                    授權條款。
+                </p>
+                <p style="margin: 0;">引用或轉載請務必<strong>註明出處</strong>並附上原始連結。</p>
+            </div>
+        </footer>
     </style>
 </head>
 <body>
