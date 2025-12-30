@@ -1,34 +1,52 @@
 {{ define "main" }}
 <div style="max-width: 800px; margin: 0 auto; padding: 2rem 20px;">
     
-    <!-- 頁面標題 -->
     <header style="margin-bottom: 4rem; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 2rem;">
         <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ .Title }}</h1>
         <p style="color: #666;">這裡收錄了所有的文章紀錄</p>
     </header>
 
-    <!-- 文章列表區塊 -->
     <section>
-        <!-- 這裡會列出 posts 資料夾下的所有文章 -->
-        {{ range .Pages }}
-        <article style="margin-bottom: 3rem; display: flex; flex-direction: column; gap: 0.5rem;">
-            
-            <div style="font-size: 0.85rem; color: #999;">
-                {{ .Date.Format "2006.01.02" }}
-            </div>
+        <!-- 邏輯準備 -->
+        {{ $all := where .Pages "Params.hidden" "!=" true }}
+        {{ $pinned := where $all "Params.pinned" true }}
+        {{ $others := where $all "Params.pinned" "!=" true }}
 
+        <!-- 置頂文章 -->
+        {{ range $pinned }}
+        <article style="margin-bottom: 3rem; display: flex; flex-direction: column; gap: 0.5rem; background: #fafafa; padding: 1.5rem; border-radius: 12px; border: 1px solid #eee;">
+            <div style="font-size: 0.85rem; color: #d946ef; font-weight: bold;">
+                置頂
+                <span style="color: #ccc; margin: 0 5px;">|</span>
+                <span style="color: #999; font-weight: normal;">{{ .Date.Format "2006.01.02" }}</span>
+            </div>
             <h2 style="font-size: 1.6rem; margin: 0; font-weight: 700;">
                 <a href="{{ .RelPermalink }}" style="color: #333; text-decoration: none;">{{ .Title }}</a>
             </h2>
-
             {{ if .Params.description }}
             <p style="color: #555; margin: 0.5rem 0 1rem 0; line-height: 1.6;">{{ .Params.description }}</p>
             {{ end }}
-
             <a href="{{ .RelPermalink }}" style="color: #d946ef; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center;">
                 閱讀全文 <span style="margin-left: 5px;">→</span>
             </a>
+        </article>
+        {{ end }}
 
+        <!-- 普通文章 -->
+        {{ range $others }}
+        <article style="margin-bottom: 3rem; display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="font-size: 0.85rem; color: #999;">
+                {{ .Date.Format "2006.01.02" }}
+            </div>
+            <h2 style="font-size: 1.6rem; margin: 0; font-weight: 700;">
+                <a href="{{ .RelPermalink }}" style="color: #333; text-decoration: none;">{{ .Title }}</a>
+            </h2>
+            {{ if .Params.description }}
+            <p style="color: #555; margin: 0.5rem 0 1rem 0; line-height: 1.6;">{{ .Params.description }}</p>
+            {{ end }}
+            <a href="{{ .RelPermalink }}" style="color: #d946ef; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center;">
+                閱讀全文 <span style="margin-left: 5px;">→</span>
+            </a>
         </article>
         {{ end }}
     </section>
