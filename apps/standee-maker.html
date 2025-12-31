@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>立牌製造機</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --accent-color: #ff9800; /* Rust color */
+            --paper-width: 210mm;
+            --paper-height: 297mm;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 左側控制面板 */
+        .controls {
+            width: 320px;
+            padding: 20px;
+            background-color: #252525;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #aaa;
+        }
+
+        input[type="file"], input[type="number"], input[type="text"], button {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: white;
+        }
+
+        /* 檔案輸入框的特殊排版 */
+        .file-input-wrapper {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .file-input-wrapper input[type="file"] {
+            flex-grow: 1;
+            font-size: 0.8rem;
+        }
+        .clear-btn {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 1rem;
+            line-height: 1;
+            display: none; /* 預設隱藏 */
+        }
+        .clear-btn:hover { background-color: #b71c1c; }
+
+        button.primary-btn {
+            background-color: var(--accent-color);
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button.primary-btn:hover {
+            background-color: #ffb74d;
+        }
+
+        button.secondary {
+            background-color: #555;
+            color: white;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .preview-img-box {
+            width: 100%;
+            height: 150px;
+            border: 2px dashed #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+            margin-top: 5px;
+        }
+
+        .preview-img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .status-text {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* 右側預覽/列印區 */
+        .preview-area {
+            flex-grow: 1;
+            background-color: #555;
+            padding: 40px;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* A4 紙張模擬 */
+        .sheet {
+            width: var(--paper-width);
+            height: var(--paper-height);
+            background-color: white;
+            padding: 10mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 5mm;
+            position: relative;
+        }
+
+        /* 立牌本體樣式 */
+        .standee-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            outline: 1px dashed #bbb; /* 裁剪線 */
+            page-break-inside: avoid;
+        }
+
+        .standee-part {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .standee-part img {
+            display: block;
+        }
+
+        /* 背面需要旋轉 180 度 */
+        .standee-back {
+            transform: rotate(180deg);
+            border-bottom: 1px dashed #ccc; /* 這是中間的折線 */
+        }
+
+        .standee-front {
+            border-bottom: 1px solid #999; /* 這是底部底板的折線 */
+        }
+
+        /* 底板樣式 */
+        .standee-base-tab {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* 上方底板 (需要倒置) */
+        .standee-top-tab {
+            transform: rotate(180deg);
+            border-bottom: 1px solid #999; /* 這是連接背面的折線 */
+        }
+
+        .standee-name {
+            position: absolute;
+            bottom: 2px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255,255,255,0.8);
+            color: black;
+            font-size: 10px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 5;
+            display: none;
+        }
+
+        .standee-container:hover .delete-btn {
+            display: block;
+        }
+
+        @media print {
+            body { background-color: white; height: auto; display: block; }
+            .controls { display: none; }
+            .preview-area { padding: 0; overflow: visible; }
+            .sheet { box-shadow: none; margin: 0; width: 100%; height: auto; padding: 0; }
+            .delete-btn { display: none !important; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h1>Standee Maker</h1>
+        
+        <div class="input-group">
+            <label>1. 正面圖片 (Front)</label>
+            <input type="file" id="frontInput" accept="image/*">
+            <div class="preview-img-box" id="frontPreviewBox">
+                <span style="font-size: 12px; color:#555;">預覽</span>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #444; width: 100%; margin: 10px 0;">
+
+        <div class="input-group">
+            <label>2. 背面圖片 (Back)</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="backInput" accept="image/*">
+                <button id="clearBackBtn" class="clear-btn" title="清空背面圖片">×</button>
+            </div>
+            <div class="status-text" id="backStatus">狀態: 無 (將使用正面鏡像)</div>
+            
+            <div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+                <input type="checkbox" id="mirrorCheck" checked>
+                <label for="mirrorCheck" style="font-size:0.8rem; font-weight:normal; color:#e0e0e0;">背面水平翻轉</label>
+            </div>
+            <p style="font-size:0.7rem; color:#666;">*若未上傳背面，系統會自動使用正面。</p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #444; width: 100%; margin: 10px 0;">
+
+        <div class="input-group">
+            <label>3. 尺寸設定 (mm)</label>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>寬度/底板</label>
+                    <input type="number" id="baseWidth" value="25">
+                </div>
+                <div style="flex:1;">
+                    <label>高度</label>
+                    <input type="number" id="standeeHeight" placeholder="自動">
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>4. 單位名稱</label>
+            <input type="text" id="unitName" placeholder="輸入單位名稱">
+        </div>
+
+        <button class="primary-btn" onclick="addToSheet()">加入列印清單 (Add)</button>
+        <button class="secondary" onclick="clearSheet()">清空紙張 (Clear All)</button>
+        <button class="secondary" onclick="window.print()">🖨️ 列印 (Print)</button>
+    </div>
+
+    <div class="preview-area">
+        <div class="sheet" id="printSheet"></div>
+    </div>
+
+    <script>
+        const frontInput = document.getElementById('frontInput');
+        const backInput = document.getElementById('backInput');
+        const frontPreviewBox = document.getElementById('frontPreviewBox');
+        const printSheet = document.getElementById('printSheet');
+        const clearBackBtn = document.getElementById('clearBackBtn');
+        const backStatus = document.getElementById('backStatus');
+        
+        let frontImgData = null;
+        let backImgData = null;
+
+        // 讀取正面
+        frontInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                frontImgData = event.target.result;
+                frontPreviewBox.innerHTML = `<img src="${frontImgData}">`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // 讀取背面
+        backInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                backImgData = event.target.result;
+                updateBackUI(true); // 更新UI狀態
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // 清空背面功能
+        clearBackBtn.addEventListener('click', function() {
+            backInput.value = ''; // 清空 input value
+            backImgData = null;   // 清空資料變數
+            updateBackUI(false);  // 更新UI狀態
+        });
+
+        // 更新背面UI狀態顯示
+        function updateBackUI(hasImage) {
+            if (hasImage) {
+                clearBackBtn.style.display = 'block';
+                backStatus.innerText = '狀態: 已載入自訂背面';
+                backStatus.style.color = '#4caf50'; // Green
+            } else {
+                clearBackBtn.style.display = 'none';
+                backStatus.innerText = '狀態: 無 (將使用正面鏡像)';
+                backStatus.style.color = '#888'; // Grey
+            }
+        }
+
+        function addToSheet() {
+            if (!frontImgData) {
+                alert("請至少上傳正面圖片！");
+                return;
+            }
+
+            const widthMM = document.getElementById('baseWidth').value || 25;
+            const heightMM = document.getElementById('standeeHeight').value;
+            const unitName = document.getElementById('unitName').value;
+            const mirror = document.getElementById('mirrorCheck').checked;
+
+            let finalBackImg = backImgData;
+            let backTransform = "";
+            
+            // 邏輯：如果沒有背面圖，就用正面圖
+            if (!finalBackImg) {
+                finalBackImg = frontImgData;
+                // 只有在使用正面圖當背面時，才考慮鏡像選項
+                if (mirror) backTransform = "transform: scaleX(-1);";
+            }
+
+            const container = document.createElement('div');
+            container.className = 'standee-container';
+            container.style.width = widthMM + 'mm';
+
+            // 圖片樣式
+            let imgStyle = `width: ${widthMM}mm;`;
+            if (heightMM) imgStyle += `height: ${heightMM}mm; object-fit: contain;`;
+            else imgStyle += `height: auto;`;
+
+            // 1. 上底板 (倒置)
+            const topBase = document.createElement('div');
+            topBase.className = 'standee-base-tab standee-top-tab';
+            topBase.style.width = widthMM + 'mm';
+            topBase.style.height = widthMM/2 + 'mm'; 
+            topBase.innerText = `${widthMM}mm`;
+
+            // 2. 背面 (倒置)
+            const backDiv = document.createElement('div');
+            backDiv.className = 'standee-part standee-back';
+            backDiv.innerHTML = `<img src="${finalBackImg}" style="${imgStyle} ${backTransform}">`;
+            
+            // 3. 正面
+            const frontDiv = document.createElement('div');
+            frontDiv.className = 'standee-part standee-front';
+            frontDiv.innerHTML = `<img src="${frontImgData}" style="${imgStyle}">`;
+            
+            if (unitName) {
+                const nameTag = document.createElement('div');
+                nameTag.className = 'standee-name';
+                nameTag.innerText = unitName;
+                frontDiv.appendChild(nameTag);
+            }
+
+            // 4. 下底板
+            const bottomBase = document.createElement('div');
+            bottomBase.className = 'standee-base-tab';
+            bottomBase.style.width = widthMM + 'mm';
+            bottomBase.style.height = widthMM/2 + 'mm';
+            bottomBase.innerText = `${widthMM}mm`;
+
+            const delBtn = document.createElement('div');
+            delBtn.className = 'delete-btn';
+            delBtn.innerHTML = '×';
+            delBtn.onclick = function() { container.remove(); };
+
+            container.appendChild(delBtn);
+            container.appendChild(topBase);    // 上
+            container.appendChild(backDiv);    // 中上
+            container.appendChild(frontDiv);   // 中下
+            container.appendChild(bottomBase); // 下
+
+            printSheet.appendChild(container);
+        }
+
+        function clearSheet() {
+            if(confirm("確定要清空所有立牌嗎？")) printSheet.innerHTML = '';
+        }
+    </script>
+</body>
+</html>
