@@ -159,13 +159,33 @@ button{font-family:inherit}
 @keyframes tin{from{opacity:0;transform:translateY(-8px)}to{opacity:1}}
 
 @media(max-width:760px){
-  .card{width:96px;height:136px;padding:6px}
+  .card{width:94px;height:132px;padding:6px}
   .card .cn{font-size:11px} .card .cd{font-size:9.5px}
-  .actor .body{font-size:44px}
-  #energy{width:52px;height:52px;font-size:16px}
-  #hud{height:auto;padding:6px 10px;gap:8px;font-size:12px}
-  #endturn{width:64px;padding:10px 6px;font-size:12px}
-  .pile{width:54px}
+  .card:hover{transform:none;box-shadow:none}
+  .card.sel{transform:translateY(-8px) scale(1.04)}
+  .actor .body{font-size:42px}
+  .actor::after{width:50px;bottom:46px}
+  .bar{width:84px}
+  #hud{height:auto;padding:5px 8px;gap:7px;font-size:12px}
+  #hud button{padding:4px 9px;font-size:12px}
+  .relic{width:24px;height:24px;font-size:13px}
+  #field{padding:12px 4px 32px;gap:6px}
+  .side{gap:8px;flex-wrap:wrap;justify-content:center}
+  .actor{min-width:78px}
+  #field::after{bottom:24px}
+  /* 手牌改成一列可橫向捲動，其餘控制項排在下面 */
+  #handbar{flex-wrap:wrap;padding:6px 6px 8px;gap:6px}
+  #hand{order:1;flex:1 0 100%;width:100%;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+    justify-content:flex-start;min-height:138px;padding:4px 2px 6px;-webkit-overflow-scrolling:touch}
+  #energy{order:2;width:46px;height:46px;font-size:15px;border-width:2px}
+  #piles{order:3;flex-direction:row;gap:6px;flex:1}
+  .pile{width:auto;flex:1;padding:5px 0;font-size:10px}
+  .pile b{font-size:13px}
+  #endturn{order:4;width:auto;flex:1;padding:9px 6px;font-size:13px}
+  .panel{padding:16px 14px}
+  .deckgrid{gap:6px;max-height:52vh}
+  .cardrow{gap:8px}
+  .row-c button{min-width:0 !important;font-size:13px;padding:9px 14px}
 }
 ::-webkit-scrollbar{width:9px;height:9px}
 ::-webkit-scrollbar-track{background:#100d16}
