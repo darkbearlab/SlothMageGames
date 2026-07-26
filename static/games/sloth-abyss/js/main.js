@@ -67,6 +67,10 @@ const Game = {
       if (e.button === 2) this.mouse.rdown = false;
     });
     cv.addEventListener('contextmenu', e => e.preventDefault());
+    window.addEventListener('blur', () => {
+      this.keys = {}; this.mouse.down = false;
+      if (this.state === 'play') UI.togglePause();
+    });
     // 觸控：點擊移動 + 自動攻擊
     cv.addEventListener('touchstart', e => {
       Audio.resume();
@@ -166,6 +170,11 @@ const Game = {
     this.runStats.floor = Math.max(this.runStats.floor, n);
     if (n > (Save.meta.bestFloor || 0)) { Save.meta.bestFloor = n; Save.saveMeta(); }
     UI.floorBanner(n, this.biome.name, isBoss);
+    if (first && !Save.meta.seenTutorial) {
+      Save.meta.seenTutorial = true; Save.saveMeta();
+      setTimeout(() => UI.toast('WASD 移動 · 左鍵攻擊 · Q/E/R 技能 · F 互動 · 空白鍵喝藥水', '#9ad0ff', 9), 2000);
+      setTimeout(() => UI.toast('找到藍色樓梯往下走，每 5 層有一位王', '#ffd45e', 8), 5000);
+    }
     this.saveRun();
     Audio.play('stairs');
   },
@@ -809,8 +818,10 @@ const Game = {
       // 暫停但仍畫面更新
       this.updateVisualOnly(dt);
     }
-    if (this.player && (this.state === 'play' || this.state === 'levelup' || this.state === 'dead' ||
-      this.state === 'shop' || this.state === 'paused')) {
+    const inWorld = this.player && (this.state === 'play' || this.state === 'levelup' ||
+      this.state === 'dead' || this.state === 'shop' || this.state === 'paused');
+    if (!inWorld) { Render.drawMenuBg(now / 1000); return; }
+    if (inWorld) {
       Render.draw(this);
       if (this.frame % 3 === 0 && Save.meta.settings.minimap) UI.drawMinimap();
       if (this.frame % 6 === 0) UI.updateHud();

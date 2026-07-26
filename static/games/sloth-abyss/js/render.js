@@ -656,6 +656,46 @@ const Render = {
     ctx.fillRect(0, 0, this.w, this.h);
   },
 
+
+  /* ============ 選單背景（無 player 時） ============ */
+  menuParts: null,
+  drawMenuBg(t) {
+    const ctx = this.ctx;
+    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    const g = ctx.createLinearGradient(0, 0, 0, this.h);
+    g.addColorStop(0, '#0a0710');
+    g.addColorStop(0.55, '#120b16');
+    g.addColorStop(1, '#1c0f0c');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, this.w, this.h);
+
+    if (!this.menuParts) {
+      this.menuParts = [];
+      for (let i = 0; i < 90; i++)
+        this.menuParts.push({
+          x: urng.range(0, 1), y: urng.range(0, 1), s: urng.range(1, 3.4),
+          v: urng.range(0.012, 0.05), w: urng.range(0, TAU), a: urng.range(0.25, 0.8)
+        });
+    }
+    // 深處的光暈
+    const cx = this.w / 2, cy = this.h * 0.62;
+    const rg = ctx.createRadialGradient(cx, cy, 10, cx, cy, this.h * 0.75);
+    rg.addColorStop(0, `rgba(255,120,40,${0.1 + Math.sin(t * 0.6) * 0.03})`);
+    rg.addColorStop(1, 'rgba(255,80,20,0)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, this.w, this.h);
+
+    for (const p of this.menuParts) {
+      p.y -= p.v * 0.01;
+      if (p.y < -0.05) { p.y = 1.05; p.x = urng.next(); }
+      const x = (p.x * this.w) + Math.sin(t * 0.7 + p.w) * 26;
+      const y = p.y * this.h;
+      ctx.fillStyle = `rgba(255,${140 + p.s * 20 | 0},80,${p.a * (0.4 + Math.sin(t * 2 + p.w) * 0.3)})`;
+      ctx.fillRect(x, y, p.s, p.s);
+    }
+    this.drawVignette(ctx);
+  },
+
   /* ============ 小地圖 ============ */
   drawMinimap(G, ctx2, size) {
     const map = G.map;
