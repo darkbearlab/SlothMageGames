@@ -31,6 +31,9 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
 .g-deck{background:linear-gradient(150deg,#191423,#100d16 60%,#241a2e)}
 .g-deck h3{color:#c48cff}
 .g-deck .play{background:linear-gradient(180deg,#3d2a5e,#241839);border:2px solid #6a4a9c;color:#e0c0ff}
+.g-tactics{background:linear-gradient(150deg,#161d25,#0d1116 60%,#12242c)}
+.g-tactics h3{color:#5fd6ff}
+.g-tactics .play{background:linear-gradient(180deg,#1e4a5c,#123240);border:2px solid #2f7a96;color:#bfe8ff}
 </style>
 
 <a class="gcard g-abyss" href="/SlothMageGames/games/sloth-abyss/">
@@ -68,6 +71,15 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <p>殺戮尖塔式的卡牌 roguelike。40 張卡、16 件遺物、隨機事件與商店，
      三幕地圖各有一位守關者。牌組不是越厚越好——這是這款遊戲教你的第一件事。</p>
   <span class="play">▶ 開始牌局</span>
+</a>
+
+<a class="gcard g-tactics" href="/SlothMageGames/games/sloth-tactics/">
+  <div class="tagline">TACTICS · PUZZLE</div>
+  <h3>樹懶法師：時空棋局</h3>
+  <div class="meta"><span>戰棋</span><span>攻擊全預告</span><span>推撞</span><span>8×8</span></div>
+  <p>怪物下一步要打哪裡，全部先亮給你看。所以這不是「怎麼躲」的遊戲，
+     而是「怎麼把牠們推到會互相打到的位置」的遊戲——推進水裡還會直接淹死。</p>
+  <span class="play">▶ 開始佈局</span>
 </a>
 
 {{< /rawhtml >}}

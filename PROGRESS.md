@@ -71,8 +71,15 @@
 - [x] 完成並串進網站（games.md / projects.md / devlog）
 - 測試：scratchpad/`test-deck.js`（全流程）、`bal-deck.js`（自動玩家平衡模擬）
 
+## 遊戲 5（完成）：《樹懶法師：時空棋局》Sloth Tactics
+路徑：`static/games/sloth-tactics/`（index.html + js/game.js，Canvas 棋盤 + DOM 側欄）
+Into the Breach 式戰棋：敵人攻擊全預告，核心是推撞（撞牆雙方受傷、推進水裡即死）。
+3 單位 / 6 種敵人 / 8 種強化 / 每任務 5 回合 / 電網歸零即結束。
+- [x] 完成並串進網站
+- 測試：scratchpad/`test-tactics.js`
+
 ## 尚未做但可以做的（若還有時間）
-- 遊戲 5：物理／解謎類（例如彈射、繩索、重力）
+- 遊戲 6：物理／解謎類（例如彈射、繩索、重力）
 - 深淵輪迴：更多職業技能、詞綴、成就系統
 - 工房：分流器、藍圖、統計圖表
 - 塔防：更多符文（風/土）、地圖選擇

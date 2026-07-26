@@ -86,3 +86,20 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 {{< /rawhtml >}}
 
 ---
+
+### 6. 樹懶法師：時空棋局 (Sloth Tactics)
+《Into the Breach》式的戰棋：敵人的攻擊全部預先公開，你的工作是重新安排「誰會打到誰」。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#161d25,#0d1116);color:#e2ebf2">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#7f92a3">TACTICS · PUZZLE</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#5fd6ff">樹懶法師：時空棋局</div>
+  <div style="font-size:.9rem;color:#b9c8d4;line-height:1.7;margin-bottom:1rem">
+    3 個單位 · 6 種怪物 · 8 種強化 · 無限任務<br>
+    每回合都是一道有解的謎題，沒有隨機骰子。
+  </div>
+  <a href="/SlothMageGames/games/sloth-tactics/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#1e4a5c,#123240);border:2px solid #2f7a96;color:#bfe8ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---
