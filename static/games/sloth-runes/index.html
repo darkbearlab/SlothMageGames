@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>樹懶法師：符文塔防 | Sloth Runes</title>
+<meta name="description" content="火、冰、雷三種符文可以疊在同一座塔上，融合出蒸汽、熔雷、霜雷與混沌。網頁塔防遊戲。">
+<style>
+:root{
+  --bg:#0f0c17;--panel:#171326;--panel2:#1f1a33;--line:#332a4d;
+  --text:#e6e0f5;--dim:#8b81a6;--fire:#ff7a3c;--ice:#5fd0ff;--bolt:#ffd84a;
+  --gold:#ffd45e;--life:#ff5a7a;--acc:#b98cff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Noto Sans TC',-apple-system,'Segoe UI',system-ui,sans-serif;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+canvas{position:fixed;inset:0;display:block;touch-action:none}
+.hidden{display:none!important}
+.dim{color:var(--dim)}
+
+#top{position:fixed;top:0;left:0;right:0;height:50px;display:flex;align-items:center;gap:16px;
+  padding:0 14px;background:linear-gradient(180deg,rgba(14,10,22,.97),rgba(14,10,22,.8));
+  border-bottom:1px solid var(--line);z-index:10;font-size:14px;flex-wrap:wrap}
+#top .logo{font-weight:900;color:var(--acc);letter-spacing:1px;white-space:nowrap}
+#top .st{font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.st.life{color:var(--life)} .st.gold{color:var(--gold)} .st.wave{color:var(--acc)}
+#top .sp{flex:1}
+#top button{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:7px;
+  padding:7px 13px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:700}
+#top button:hover{border-color:var(--acc);color:var(--acc)}
+#btnWave{background:linear-gradient(180deg,#3a2a5c,#241a3c);border-color:#6a4a9c;color:#e0c0ff}
+#btnWave.ready{animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(185,140,255,.5)}50%{box-shadow:0 0 0 8px rgba(185,140,255,0)}}
+
+#bottom{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(14,10,22,.97),rgba(14,10,22,.82));
+  border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:10px;justify-content:center;
+  align-items:center;flex-wrap:wrap;z-index:10}
+.rune{width:104px;border:2px solid var(--line);border-radius:10px;background:var(--panel);
+  padding:7px 6px;text-align:center;cursor:pointer;transition:.12s;position:relative}
+.rune:hover{transform:translateY(-3px)}
+.rune.sel{box-shadow:0 0 0 2px currentColor inset}
+.rune.poor{opacity:.45}
+.rune .ic{font-size:22px}
+.rune .nm{font-size:12px;font-weight:900}
+.rune .ct{font-size:11px;color:var(--gold)}
+.rune .kk{position:absolute;top:2px;left:5px;font-size:9px;color:var(--dim)}
+.rune.f{color:var(--fire);border-color:#5c3320}
+.rune.i{color:var(--ice);border-color:#1e4a5c}
+.rune.b{color:var(--bolt);border-color:#5c5020}
+
+#side{position:fixed;right:12px;top:62px;width:268px;background:rgba(23,19,38,.97);
+  border:1px solid var(--line);border-radius:12px;padding:14px;z-index:11}
+#side h3{margin:0 0 4px;font-size:16px}
+#side .sub{font-size:11px;color:var(--dim);margin-bottom:10px}
+.srow{display:flex;justify-content:space-between;font-size:12px;padding:2px 0}
+.srow span{color:var(--dim)}
+.act{display:block;width:100%;margin-top:8px;padding:9px;border-radius:8px;background:var(--panel2);
+  border:1px solid var(--line);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.act:hover{border-color:var(--acc);color:var(--acc)}
+.act.sell:hover{border-color:#ff7a7a;color:#ff9a9a}
+.act.poor{opacity:.45}
+.elems{display:flex;gap:6px;margin:8px 0}
+.eb{flex:1;border:1px solid var(--line);border-radius:7px;padding:6px 2px;text-align:center;
+  font-size:11px;cursor:pointer;font-weight:700}
+.eb.on{opacity:.4;cursor:default}
+.eb.f{color:var(--fire)} .eb.i{color:var(--ice)} .eb.b{color:var(--bolt)}
+.eb:hover:not(.on){border-color:currentColor}
+
+#waveinfo{position:fixed;left:12px;top:62px;width:210px;background:rgba(23,19,38,.94);
+  border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:10px 12px;
+  z-index:9;font-size:12px;line-height:1.7}
+#waveinfo b{color:var(--acc)}
+
+#toasts{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;
+  gap:6px;align-items:center;z-index:20;pointer-events:none}
+.toast{background:rgba(14,10,22,.95);border:1px solid var(--acc);color:var(--acc);border-radius:7px;
+  padding:6px 14px;font-size:13px;animation:tin .25s}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+
+#modal{position:fixed;inset:0;background:rgba(8,5,14,.92);z-index:40;display:flex;align-items:center;
+  justify-content:center;padding:20px;overflow:auto}
+.mbox{max-width:620px;background:linear-gradient(180deg,#211a38,#141024);border:1px solid var(--line);
+  border-radius:16px;padding:28px 32px;text-align:left}
+.mbox h1{margin:0 0 4px;font-size:30px;color:var(--acc)}
+.mbox .sub{font-size:11px;letter-spacing:5px;color:var(--dim);margin-bottom:16px}
+.mbox p,.mbox li{font-size:13px;line-height:1.9;color:#c3badb}
+.mbox ul{padding-left:20px}
+kbd{background:#26203c;border:1px solid #3c3358;border-bottom-width:2px;border-radius:4px;padding:1px 7px;
+  font-size:11px;font-family:ui-monospace,monospace}
+.combo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0}
+.combo div{border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:12px}
+.combo b{font-size:13px}
+.bigbtn{display:block;width:100%;margin-top:18px;padding:13px;border-radius:10px;
+  background:linear-gradient(180deg,#412d68,#241a3c);border:1px solid #6a4a9c;color:#e0c0ff;
+  font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:inherit}
+.bigbtn:hover{border-color:var(--acc);color:#fff}
+@media(max-width:880px){
+  #waveinfo{display:none} #side{width:calc(100vw - 24px);right:12px;bottom:auto}
+  .rune{width:84px}
+}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<div id="top">
+  <span class="logo">🦥 符文塔防</span>
+  <span class="st life">❤ <span id="life">20</span></span>
+  <span class="st gold">💰 <span id="gold">0</span></span>
+  <span class="st wave">🌀 <span id="wave">0</span></span>
+  <span class="dim" id="enemyCount"></span>
+  <span class="sp"></span>
+  <button id="btnWave">▶ 下一波</button>
+  <button id="btnSpeed">1x</button>
+  <button id="btnHelp">?</button>
+</div>
+
+<div id="waveinfo"></div>
+<div id="bottom"></div>
+<div id="side" class="hidden"></div>
+<div id="toasts"></div>
+
+<div id="modal">
+  <div class="mbox" id="mbox">
+    <h1>樹懶法師：符文塔防</h1>
+    <div class="sub">S L O T H &nbsp; R U N E S</div>
+    <p>魔物正沿著石板路走向法師的午睡房。你不能叫醒他，只能靠符文塔把牠們攔下來。</p>
+    <p><b style="color:var(--acc)">核心機制：同一座塔可以疊上不同符文。</b>火、冰、雷任意組合會融合成新的塔：</p>
+    <div class="combo">
+      <div><b style="color:#ff9a6b">🔥 火</b><br>灼燒持續傷害</div>
+      <div><b style="color:#7fd8ff">❄ 冰</b><br>大幅減速</div>
+      <div><b style="color:#ffe066">⚡ 雷</b><br>連鎖閃電</div>
+      <div><b style="color:#ffb0d0">☁ 蒸汽 (火+冰)</b><br>範圍爆擊＋減速</div>
+      <div><b style="color:#ff8a3c">🌋 熔雷 (火+雷)</b><br>爆炸＋連鎖</div>
+      <div><b style="color:#9ad8ff">🌨 霜雷 (冰+雷)</b><br>凍結＋連鎖</div>
+      <div><b style="color:#d08cff">✦ 混沌 (三合一)</b><br>全效果，傷害大幅提升</div>
+    </div>
+    <ul>
+      <li>點擊空地建塔，點擊已有的塔可以加符文、升級或賣掉</li>
+      <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 選符文　<kbd>空白</kbd> 下一波　<kbd>Esc</kbd> 取消</li>
+      <li>提前叫下一波會給額外金幣獎勵，撐得住就衝</li>
+      <li>共 30 波，之後進入無盡模式</li>
+    </ul>
+    <button class="bigbtn" id="btnStart">開始防禦</button>
+  </div>
+</div>
+
+<script src="js/game.js"></script>
+</body>
+</html>
