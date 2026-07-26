@@ -28,6 +28,9 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
 .g-runes{background:linear-gradient(150deg,#1a1424,#120f1a 60%,#241432)}
 .g-runes h3{color:#c99aff}
 .g-runes .play{background:linear-gradient(180deg,#38224a,#1f142c);border:2px solid #6a3c9a;color:#e0c0ff}
+.g-deck{background:linear-gradient(150deg,#191423,#100d16 60%,#241a2e)}
+.g-deck h3{color:#c48cff}
+.g-deck .play{background:linear-gradient(180deg,#3d2a5e,#241839);border:2px solid #6a4a9c;color:#e0c0ff}
 </style>
 
 <a class="gcard g-abyss" href="/SlothMageGames/games/sloth-abyss/">
@@ -56,6 +59,15 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <p>火、冰、雷三種符文可以疊在同一座塔上：火＋冰是蒸汽、火＋雷是熔雷、三種一起就是混沌。
      在魔物走到法師的午睡房之前，設計出你的元素連鎖。</p>
   <span class="play">▶ 佈防</span>
+</a>
+
+<a class="gcard g-deck" href="/SlothMageGames/games/sloth-deck/">
+  <div class="tagline">DECKBUILDER · ROGUELIKE</div>
+  <h3>樹懶法師：睡前牌局</h3>
+  <div class="meta"><span>卡牌構築</span><span>回合制</span><span>分支地圖</span><span>3 幕</span></div>
+  <p>殺戮尖塔式的卡牌 roguelike。40 張卡、16 件遺物、隨機事件與商店，
+     三幕地圖各有一位守關者。牌組不是越厚越好——這是這款遊戲教你的第一件事。</p>
+  <span class="play">▶ 開始牌局</span>
 </a>
 
 {{< /rawhtml >}}

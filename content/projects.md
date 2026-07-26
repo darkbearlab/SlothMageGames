@@ -69,3 +69,20 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 {{< /rawhtml >}}
 
 ---
+
+### 5. 樹懶法師：睡前牌局 (Sloth Deck)
+卡牌構築 roguelike。分支地圖、遺物、隨機事件，以及三位一次比一次難纏的守關者。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#221b30,#150f1e);color:#e9e3f2">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#8e85a3">DECKBUILDER · ROGUELIKE</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#c48cff">樹懶法師：睡前牌局</div>
+  <div style="font-size:.9rem;color:#c7bcd8;line-height:1.7;margin-bottom:1rem">
+    40 張卡 · 16 件遺物 · 3 幕 39 個節點 · 進度自動保存<br>
+    純滑鼠操作，手機也能玩。
+  </div>
+  <a href="/SlothMageGames/games/sloth-deck/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#3d2a5e,#241839);border:2px solid #6a4a9c;color:#e0c0ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---
