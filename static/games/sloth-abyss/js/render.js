@@ -461,7 +461,7 @@ const Render = {
     // 血條
     if (e.hp < e.maxHp) {
       const w = Math.max(24, e.r * 2.2), h = e.isBoss ? 5 : 3;
-      const x = e.x - w / 2, y = e.y - e.r - 13;
+      const x = e.x - w / 2, y = e.y - e.r - (e.isBoss || e.elite ? 16 : 13);
       ctx.fillStyle = 'rgba(0,0,0,0.65)'; ctx.fillRect(x - 1, y - 1, w + 2, h + 2);
       ctx.fillStyle = e.elite ? '#ffb03c' : '#e2564a';
       ctx.fillRect(x, y, w * clamp(e.hp / e.maxHp, 0, 1), h);
@@ -470,7 +470,7 @@ const Render = {
       ctx.font = 'bold 11px "Noto Sans TC",sans-serif';
       ctx.textAlign = 'center';
       ctx.fillStyle = e.isBoss ? '#ff8c6b' : '#ffd45e';
-      ctx.fillText(e.name, e.x, e.y - e.r - 18);
+      ctx.fillText(e.name, e.x, e.y - e.r - 24);
       ctx.textAlign = 'left';
     }
     this.drawStatusIcons(ctx, e);

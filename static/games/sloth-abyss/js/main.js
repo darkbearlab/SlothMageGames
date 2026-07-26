@@ -148,6 +148,13 @@ const Game = {
     this.map.revealAround(sp.x, sp.y, 9);
 
     if (isBoss) {
+      // 王的競技場整個揭開（只揭開地板與其相鄰牆面）
+      const mp = this.map;
+      for (let y = 0; y < mp.h; y++) for (let x = 0; x < mp.w; x++) {
+        if (mp.get(x, y) !== T_WALL) { mp.seen[y * mp.w + x] = 1; continue; }
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++)
+          if (mp.get(x + dx, y + dy) !== T_WALL) { mp.seen[y * mp.w + x] = 1; }
+      }
       this.spawnBoss(d);
     } else {
       this.populateFloor(d);
