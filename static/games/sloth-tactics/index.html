@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E♟%3C/text%3E%3C/svg%3E">
+<title>樹懶法師：時空棋局 | Sloth Tactics</title>
+<meta name="description" content="敵人的攻擊全部預先公開——你的工作不是躲，是把牠們推到會互相打到的位置。網頁戰棋遊戲。">
+<style>
+:root{
+  --bg:#0d1116;--panel:#161d25;--panel2:#1e2833;--line:#2c3a47;
+  --text:#e2ebf2;--dim:#7f92a3;--gold:#ffd45e;--danger:#ff6b6b;--ally:#5fd6ff;--power:#7fe0a0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Noto Sans TC',-apple-system,'Segoe UI',system-ui,sans-serif;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.hidden{display:none!important}
+button{font-family:inherit}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column}
+
+#top{height:52px;display:flex;align-items:center;gap:16px;padding:0 14px;font-size:14px;
+  border-bottom:1px solid var(--line);background:rgba(10,14,18,.85);flex-wrap:wrap}
+#top .lg{font-weight:900;color:var(--ally);white-space:nowrap}
+.st{font-weight:700;white-space:nowrap;display:flex;gap:5px;align-items:center}
+.st.p{color:var(--power)} .st.t{color:var(--gold)}
+#top .sp{flex:1}
+#top button{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:7px;
+  padding:7px 13px;font-size:13px;cursor:pointer;font-weight:700}
+#top button:hover{border-color:var(--ally);color:var(--ally)}
+#endturn{background:linear-gradient(180deg,#1e4a5c,#123240);border-color:#2f7a96;color:#bfe8ff}
+#endturn:disabled{opacity:.4}
+
+#main{flex:1;display:flex;min-height:0}
+#boardwrap{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;min-width:0}
+canvas{display:block;touch-action:none;border-radius:10px;
+  box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 0 1px var(--line)}
+#sidebar{width:264px;flex:none;border-left:1px solid var(--line);background:rgba(14,19,25,.9);
+  padding:12px;overflow-y:auto}
+#sidebar h3{margin:0 0 8px;font-size:12px;letter-spacing:2px;color:var(--dim)}
+.unit{border:1px solid var(--line);border-radius:10px;padding:9px 10px;margin-bottom:8px;cursor:pointer;
+  background:var(--panel);transition:.12s}
+.unit:hover{border-color:var(--ally)}
+.unit.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.unit.done{opacity:.45}
+.unit .un{font-weight:900;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.unit .uh{display:flex;gap:3px;margin:5px 0}
+.pip{width:13px;height:13px;border-radius:3px;background:#3a4a58}
+.pip.on{background:#ff6b6b}
+.unit .uw{font-size:11px;color:var(--dim);line-height:1.5}
+.wbtn{display:block;width:100%;margin-top:5px;padding:6px 8px;border-radius:7px;border:1px solid var(--line);
+  background:var(--panel2);color:var(--text);font-size:12px;cursor:pointer;text-align:left}
+.wbtn:hover{border-color:var(--gold);color:var(--gold)}
+.wbtn.on{border-color:var(--gold);color:var(--gold);background:#2a2415}
+.wbtn.used{opacity:.4;cursor:default}
+#log{font-size:11px;color:var(--dim);line-height:1.6;margin-top:10px;border-top:1px solid var(--line);padding-top:8px;max-height:170px;overflow-y:auto}
+
+#modal{position:fixed;inset:0;background:rgba(5,8,11,.93);z-index:40;display:flex;align-items:center;
+  justify-content:center;padding:20px;overflow:auto}
+.mbox{max-width:620px;background:linear-gradient(180deg,#1b242e,#111820);border:1px solid var(--line);
+  border-radius:16px;padding:26px 30px}
+.mbox h1{margin:0 0 4px;font-size:28px;color:var(--ally)}
+.mbox .sub{font-size:11px;letter-spacing:5px;color:var(--dim);margin-bottom:16px}
+.mbox p,.mbox li{font-size:13px;line-height:1.9;color:#b9c8d4}
+.mbox ul{padding-left:20px}
+.mbox b{color:var(--gold)}
+.bigbtn{display:block;width:100%;margin-top:16px;padding:13px;border-radius:10px;
+  background:linear-gradient(180deg,#1e4a5c,#123240);border:1px solid #2f7a96;color:#bfe8ff;
+  font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer}
+.bigbtn:hover{border-color:var(--ally);color:#fff}
+.rewards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.rw{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel);
+  cursor:pointer;font-size:12px;max-width:190px;line-height:1.6}
+.rw:hover{border-color:var(--gold)}
+.rw b{display:block;color:var(--gold);font-size:13px;margin-bottom:4px}
+
+#toasts{position:fixed;top:62px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;
+  gap:6px;align-items:center;z-index:30;pointer-events:none}
+.toast{background:rgba(10,14,18,.95);border:1px solid var(--ally);color:var(--ally);border-radius:7px;
+  padding:6px 14px;font-size:13px}
+@media(max-width:820px){
+  #main{flex-direction:column}
+  #sidebar{width:100%;border-left:none;border-top:1px solid var(--line);max-height:38vh}
+  #top{height:auto;padding:6px 10px;gap:8px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="top">
+    <span class="lg">♟ 時空棋局</span>
+    <span class="st p">⚡ 電網 <span id="hPower">4</span></span>
+    <span class="st t">回合 <span id="hTurn">1/5</span></span>
+    <span class="st">任務 <span id="hMission">1</span></span>
+    <span class="sp"></span>
+    <button id="btnUndo">復原移動</button>
+    <button id="endturn">結束回合 ▶</button>
+    <button id="btnHelp">說明</button>
+  </div>
+  <div id="main">
+    <div id="boardwrap"><canvas id="cv"></canvas></div>
+    <div id="sidebar">
+      <h3>我方單位</h3>
+      <div id="units"></div>
+      <h3>戰報</h3>
+      <div id="log"></div>
+    </div>
+  </div>
+</div>
+<div id="toasts"></div>
+<div id="modal">
+  <div class="mbox" id="mbox">
+    <h1>樹懶法師：時空棋局</h1>
+    <div class="sub">S L O T H &nbsp; T A C T I C S</div>
+    <p>深淵的怪物正在攻擊法師的能量塔。好消息是：牠們動作太慢，<b>下一步要打哪裡會全部先亮出來</b>。</p>
+    <p>所以這不是一場「怎麼躲」的遊戲，而是一場<b>「怎麼把牠們推到會互相打到的位置」</b>的遊戲。</p>
+    <ul>
+      <li>每個回合移動並使用你的 3 個單位，然後按「結束回合」</li>
+      <li>紅色格子＝敵人這回合會攻擊的位置。把敵人推開，攻擊就會落空或打到牠的同伴</li>
+      <li>把敵人推進<b>水裡</b>會直接淹死牠，推到<b>山壁</b>上雙方各受 1 傷</li>
+      <li>敵人打到<b>能量塔</b>會扣電網。電網歸零就結束了</li>
+      <li>撐過 5 回合就算任務成功，之後可以強化單位</li>
+    </ul>
+    <button class="bigbtn" id="btnStart">開始防禦</button>
+  </div>
+</div>
+<script src="js/game.js"></script>
+</body>
+</html>
