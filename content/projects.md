@@ -103,3 +103,21 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 {{< /rawhtml >}}
 
 ---
+
+### 7. 樹懶法師的放置修行 (Sloth Idle)
+放置型魔力累積遊戲。10 種產能設施、29 種升級、16 個成就、頓悟轉生，
+以及最符合樹懶精神的功能：離線也會繼續修行。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#191527,#0f0d18);color:#e9e4f6">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#8d84a8">IDLE · INCREMENTAL</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#8ab6ff">樹懶法師的放置修行</div>
+  <div style="font-size:.9rem;color:#c3bad8;line-height:1.7;margin-bottom:1rem">
+    關掉分頁它也會繼續跑（離線收益最多累積 8～24 小時）。<br>
+    適合睡前打開，起床再回來看。
+  </div>
+  <a href="/SlothMageGames/games/sloth-idle/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#2a3560,#161c34);border:2px solid #4a5a9c;color:#c0d4ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---

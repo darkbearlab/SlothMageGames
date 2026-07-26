@@ -34,6 +34,9 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
 .g-tactics{background:linear-gradient(150deg,#161d25,#0d1116 60%,#12242c)}
 .g-tactics h3{color:#5fd6ff}
 .g-tactics .play{background:linear-gradient(180deg,#1e4a5c,#123240);border:2px solid #2f7a96;color:#bfe8ff}
+.g-idle{background:linear-gradient(150deg,#191527,#0f0d18 60%,#1e1830)}
+.g-idle h3{color:#8ab6ff}
+.g-idle .play{background:linear-gradient(180deg,#2a3560,#161c34);border:2px solid #4a5a9c;color:#c0d4ff}
 </style>
 
 <a class="gcard g-abyss" href="/SlothMageGames/games/sloth-abyss/">
@@ -80,6 +83,15 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <p>怪物下一步要打哪裡，全部先亮給你看。所以這不是「怎麼躲」的遊戲，
      而是「怎麼把牠們推到會互相打到的位置」的遊戲——推進水裡還會直接淹死。</p>
   <span class="play">▶ 開始佈局</span>
+</a>
+
+<a class="gcard g-idle" href="/SlothMageGames/games/sloth-idle/">
+  <div class="tagline">IDLE · INCREMENTAL</div>
+  <h3>樹懶法師的放置修行</h3>
+  <div class="meta"><span>放置</span><span>離線收益</span><span>轉生</span><span>成就</span></div>
+  <p>樹懶法師的修行方式是：什麼都不做。買下蒲團、法陣、學徒、星辰觀測台，
+     它們會替你累積魔力——連你關掉分頁的時候也會。累積夠了就頓悟轉生，換永久加成再來一輪。</p>
+  <span class="play">▶ 開始（不）修行</span>
 </a>
 
 {{< /rawhtml >}}

@@ -78,8 +78,16 @@ Into the Breach 式戰棋：敵人攻擊全預告，核心是推撞（撞牆雙�
 - [x] 完成並串進網站
 - 測試：scratchpad/`test-tactics.js`
 
+## 遊戲 6（完成）：《樹懶法師的放置修行》Sloth Idle
+路徑：`static/games/sloth-idle/`（index.html + js/game.js，純 DOM）
+放置型：10 種設施（1.15 倍價格成長）、29 升級、16 成就、頓悟轉生（悟性永久加成）、
+離線收益（上限 8→24 小時、效率 50%→100%，皆可升級）。
+- [x] 完成並串進網站
+- 測試：scratchpad/`test-idle.js`、`test-idle2.js`（離線收益與 max 購買）
+- 注意：測離線收益時 beforeunload 會覆寫 lastSave，直接呼叫 applyOffline() 比較準
+
 ## 尚未做但可以做的（若還有時間）
-- 遊戲 6：物理／解謎類（例如彈射、繩索、重力）
+- 遊戲 7：物理／解謎類（例如彈射、繩索、重力）
 - 深淵輪迴：更多職業技能、詞綴、成就系統
 - 工房：分流器、藍圖、統計圖表
 - 塔防：更多符文（風/土）、地圖選擇
