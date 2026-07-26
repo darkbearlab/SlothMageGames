@@ -107,6 +107,8 @@ const UI = {
     this.el.soulText.textContent = fmt(p.souls);
     this.el.potionCount.textContent = p.potions;
     this.el.manaCount.textContent = p.manaPots;
+    const pc2 = document.getElementById('potionCount2');
+    if (pc2) pc2.textContent = p.potions;
 
     // 技能冷卻
     if (this._skillEls) {

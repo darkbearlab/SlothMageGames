@@ -439,15 +439,28 @@ const R = {
     this.resize();
     window.addEventListener('resize', () => this.resize());
   },
+  pan: { x: 0, y: 0 },
   resize() {
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.w = window.innerWidth; this.h = window.innerHeight;
     this.cv.width = this.w * this.dpr; this.cv.height = this.h * this.dpr;
     this.cv.style.width = this.w + 'px'; this.cv.style.height = this.h + 'px';
-    const availW = this.w - 24, availH = this.h - 140;
-    this.scale = Math.min(availW / (GW * TS), availH / (GH * TS), 1.25);
-    this.ox = (this.w - GW * TS * this.scale) / 2;
-    this.oy = 58 + (availH - GH * TS * this.scale) / 2;
+    this.availH = this.h - 140;
+    const fit = Math.min((this.w - 24) / (GW * TS), this.availH / (GH * TS), 1.25);
+    // 小螢幕：不要縮到看不見，改成可拖曳平移
+    const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    this.scale = touch ? Math.max(fit, 0.62) : fit;
+    this.layout();
+  },
+  layout() {
+    const bw = GW * TS * this.scale, bh = GH * TS * this.scale;
+    const maxPanX = Math.max(0, (bw - (this.w - 16)) / 2);
+    const maxPanY = Math.max(0, (bh - this.availH) / 2);
+    this.pan.x = clamp(this.pan.x, -maxPanX, maxPanX);
+    this.pan.y = clamp(this.pan.y, -maxPanY, maxPanY);
+    this.ox = (this.w - bw) / 2 + this.pan.x;
+    this.oy = 58 + (this.availH - bh) / 2 + this.pan.y;
+    this.canPan = maxPanX > 0 || maxPanY > 0;
   },
   s2g(sx, sy) {
     return {
@@ -907,14 +920,48 @@ function bindInput() {
     const g = R.s2g(e.clientX, e.clientY);
     handleClick(g.x, g.y);
   });
+  let tStart = null, tMoved = false, tLast = null;
   cv.addEventListener('touchstart', e => {
     if (!Sound.ctx) Sound.init();
     const t = e.touches[0];
-    const g = R.s2g(t.clientX, t.clientY);
-    G.hover = g;
-    handleClick(g.x, g.y);
+    tStart = { x: t.clientX, y: t.clientY };
+    tLast = { x: t.clientX, y: t.clientY };
+    tMoved = false;
     e.preventDefault();
   }, { passive: false });
+  cv.addEventListener('touchmove', e => {
+    if (!tStart) return;
+    const t = e.touches[0];
+    if (Math.abs(t.clientX - tStart.x) + Math.abs(t.clientY - tStart.y) > 10) tMoved = true;
+    if (tMoved && R.canPan) {
+      R.pan.x += t.clientX - tLast.x;
+      R.pan.y += t.clientY - tLast.y;
+      R.layout();
+    }
+    tLast = { x: t.clientX, y: t.clientY };
+    e.preventDefault();
+  }, { passive: false });
+  cv.addEventListener('touchend', e => {
+    if (tStart && !tMoved) {
+      const g = R.s2g(tStart.x, tStart.y);
+      G.hover = g;
+      handleClick(g.x, g.y);
+    }
+    tStart = null;
+    e.preventDefault();
+  }, { passive: false });
+  // 桌機：中鍵拖曳平移
+  let mDrag = null;
+  cv.addEventListener('mousedown', e => {
+    if (e.button === 1) { mDrag = { x: e.clientX, y: e.clientY }; e.preventDefault(); }
+  });
+  window.addEventListener('mousemove', e => {
+    if (!mDrag || !R.canPan) return;
+    R.pan.x += e.clientX - mDrag.x; R.pan.y += e.clientY - mDrag.y;
+    mDrag = { x: e.clientX, y: e.clientY };
+    R.layout();
+  });
+  window.addEventListener('mouseup', () => mDrag = null);
   cv.addEventListener('contextmenu', e => e.preventDefault());
   window.addEventListener('keydown', e => {
     const k = e.key.toLowerCase();

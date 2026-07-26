@@ -27,6 +27,7 @@ const Render = {
     this.canvas.style.height = this.h + 'px';
     this.lightCanvas.width = Math.floor(this.w * 0.5);
     this.lightCanvas.height = Math.floor(this.h * 0.5);
+    this.zoom = this.w < 720 ? 1.0 : (this.w < 1100 ? 1.25 : 1.4);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.ctx.imageSmoothingEnabled = false;
   },

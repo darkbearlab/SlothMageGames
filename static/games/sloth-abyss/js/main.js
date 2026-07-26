@@ -172,7 +172,10 @@ const Game = {
     UI.floorBanner(n, this.biome.name, isBoss);
     if (first && !Save.meta.seenTutorial) {
       Save.meta.seenTutorial = true; Save.saveMeta();
-      setTimeout(() => UI.toast('WASD 移動 · 左鍵攻擊 · Q/E/R 技能 · F 互動 · 空白鍵喝藥水', '#9ad0ff', 9), 2000);
+      const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+      setTimeout(() => UI.toast(touch
+        ? '按住畫面朝該方向移動，靠近敵人會自動攻擊；下方按鈕放技能與喝藥水'
+        : 'WASD 移動 · 左鍵攻擊 · Q/E/R 技能 · F 互動 · 空白鍵喝藥水', '#9ad0ff', 9), 2000);
       setTimeout(() => UI.toast('找到藍色樓梯往下走，每 5 層有一位王', '#ffd45e', 8), 5000);
     }
     this.saveRun();

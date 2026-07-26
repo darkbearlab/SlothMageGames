@@ -96,8 +96,12 @@ kbd{background:#26203c;border:1px solid #3c3358;border-bottom-width:2px;border-r
   font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:inherit}
 .bigbtn:hover{border-color:var(--acc);color:#fff}
 @media(max-width:880px){
-  #waveinfo{display:none} #side{width:calc(100vw - 24px);right:12px;bottom:auto}
+  #waveinfo{display:none} #side{width:calc(100vw - 24px);right:12px;bottom:auto;max-height:60vh;overflow-y:auto}
   .rune{width:84px}
+  #top{height:auto;min-height:50px;padding:6px 10px;gap:10px;font-size:13px}
+  #top .logo{font-size:13px}
+  #bottom{padding:6px 8px;gap:6px}
+  #hintCard{display:none}
 }
 </style>
 </head>
