@@ -35,3 +35,20 @@ description: "這裡陳列樹懶法師的作品。"
 {{< /rawhtml >}}
 
 ---
+
+### 3. 樹懶法師的自動化工房 (Sloth Factory)
+Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、組裝機、研究樹，
+目標是讓工房完全不需要你就能自己運轉。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#131b20,#0f1418);color:#dbe8ea">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#7d939b">AUTOMATION · SANDBOX</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#4fd6a8">樹懶法師的自動化工房</div>
+  <div style="font-size:.9rem;color:#b6c8cc;line-height:1.7;margin-bottom:1rem">
+    7 種建築、13 種物品、8 項研究。<br>拖曳鋪輸送帶、R 旋轉方向、右鍵拆除，進度自動保存。
+  </div>
+  <a href="/SlothMageGames/games/sloth-factory/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#1d4a3d,#123027);border:2px solid #2f8a6c;color:#a8ffdd;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---

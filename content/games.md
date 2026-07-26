@@ -39,4 +39,14 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <span class="play">▶ 進入深淵</span>
 </a>
 
+<a class="gcard g-factory" href="/SlothMageGames/games/sloth-factory/">
+  <div class="tagline">AUTOMATION · SANDBOX</div>
+  <h3>樹懶法師的自動化工房</h3>
+  <div class="meta"><span>生產線</span><span>輸送帶</span><span>研究樹</span><span>無壓力</span></div>
+  <p>樹懶的信條是：能讓機器做的事，絕不自己動手。從一台挖礦機開始，
+     鋪輸送帶、蓋熔爐、組裝魔導元件，把整座工房變成會自己賺錢的機器，
+     最後造出「終極樹懶符文」——然後你就可以躺著看它運轉了。</p>
+  <span class="play">▶ 開始生產</span>
+</a>
+
 {{< /rawhtml >}}

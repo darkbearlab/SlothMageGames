@@ -42,15 +42,17 @@
 - [x] 接到 Hugo 網站（games.md + nav + projects.md + devlog）
 - [x] commit & push & draft PR：https://github.com/darkbearlab/SlothMageGames/pull/2 （已訂閱 PR 活動；CI 只在 push main 觸發，此 PR 無 CI）
 
-## 遊戲 2（進行中）：《樹懶法師的自動化工房》Sloth Factory
+## 遊戲 2（完成）：《樹懶法師的自動化工房》Sloth Factory
 路徑：`static/games/sloth-factory/`（單一 HTML 檔，內嵌全部程式）
 網格式自動化生產遊戲（Factorio-lite）：挖礦機→輸送帶→熔爐→組裝機→研究→販賣。
 檔案：`static/games/sloth-factory/index.html` + `js/game.js`
 注意：`content/games.md` 目前只放了深淵輪迴的卡片，工房與塔防的卡片要等遊戲做好再加回去
 （卡片的 CSS class `.g-factory` / `.g-runes` 已經在該檔案的 style 裡了）。
-- [ ] 完成並串進網站
+- [x] 完成並串進網站（games.md / projects.md 卡片已加）
+- 測試腳本：scratchpad/`test-factory.js`（系統）、`ui-factory.js`（滑鼠操作）
+- 伺服器：`npx http-server -p 8100 static/games`
 
-## 遊戲 3：《樹懶法師：符文塔防》Sloth Runes（塔防 + 元素合成）
+## 遊戲 3（進行中）：《樹懶法師：符文塔防》Sloth Runes（塔防 + 元素合成）
 路徑：`static/games/sloth-runes/`（單一 HTML）
 - [ ] 完成並串進網站
 
