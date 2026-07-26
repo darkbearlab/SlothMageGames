@@ -65,6 +65,19 @@
   用 `npx http-server -p 8099 static/games/sloth-abyss` + chromium 於 /opt/pw-browsers/chromium-1194/chrome-linux/chrome
 - 已驗證：5 職業、21 層、全技能、全神龕、全 boss 招式、存讀檔、60fps、0 JS error
 
+## 遊戲 4（完成）：《樹懶法師：睡前牌局》Sloth Deck
+路徑：`static/games/sloth-deck/`（index.html + js/game.js，純 DOM 介面）
+殺戮尖塔式卡牌 roguelike：40 張卡、16 遺物、6 事件、3 幕分支地圖、3 位守關者。
+- [x] 完成並串進網站（games.md / projects.md / devlog）
+- 測試：scratchpad/`test-deck.js`（全流程）、`bal-deck.js`（自動玩家平衡模擬）
+
+## 尚未做但可以做的（若還有時間）
+- 遊戲 5：物理／解謎類（例如彈射、繩索、重力）
+- 深淵輪迴：更多職業技能、詞綴、成就系統
+- 工房：分流器、藍圖、統計圖表
+- 塔防：更多符文（風/土）、地圖選擇
+- 牌局：第二個職業（不同起始牌組）、每日挑戰種子
+
 ## 決策紀錄
 - 用 Canvas 2D 純程式繪圖（無外部素材），像素/發光風格
 - UI 語言：繁體中文
