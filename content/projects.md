@@ -52,3 +52,20 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 {{< /rawhtml >}}
 
 ---
+
+### 4. 樹懶法師：符文塔防 (Sloth Runes)
+可以把不同元素符文疊在同一座塔上的塔防遊戲。七種塔型全部來自三種符文的排列組合。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#1f1a33,#141024);color:#e6e0f5">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#8b81a6">TOWER DEFENSE · ALCHEMY</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#b98cff">樹懶法師：符文塔防</div>
+  <div style="font-size:.9rem;color:#c3badb;line-height:1.7;margin-bottom:1rem">
+    火 ＋ 冰 ＝ 蒸汽　火 ＋ 雷 ＝ 熔雷　冰 ＋ 雷 ＝ 霜雷　三合一 ＝ 混沌<br>
+    30 波戰役，撐過去還有無盡模式。
+  </div>
+  <a href="/SlothMageGames/games/sloth-runes/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#412d68,#241a3c);border:2px solid #6a4a9c;color:#e0c0ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---

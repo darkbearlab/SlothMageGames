@@ -52,9 +52,11 @@
 - 測試腳本：scratchpad/`test-factory.js`（系統）、`ui-factory.js`（滑鼠操作）
 - 伺服器：`npx http-server -p 8100 static/games`
 
-## 遊戲 3（進行中）：《樹懶法師：符文塔防》Sloth Runes（塔防 + 元素合成）
-路徑：`static/games/sloth-runes/`（單一 HTML）
-- [ ] 完成並串進網站
+## 遊戲 3（完成）：《樹懶法師：符文塔防》Sloth Runes
+路徑：`static/games/sloth-runes/`（index.html + js/game.js）
+- [x] 完成並串進網站
+- 測試：scratchpad/`test-runes.js`（系統）、`ui-runes.js`（滑鼠）、`balance-runes.js`（用 update(0.05) 快轉做平衡模擬）
+- 平衡結論：最佳化打法可通關 30 波，無盡模式約 34 波陣亡
 
 ### 已完成的技術細節
 - flow field 尋路（BFS 每 0.22s）+ 仇恨半徑 340/視線 620

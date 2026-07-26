@@ -49,4 +49,13 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <span class="play">▶ 開始生產</span>
 </a>
 
+<a class="gcard g-runes" href="/SlothMageGames/games/sloth-runes/">
+  <div class="tagline">TOWER DEFENSE · ALCHEMY</div>
+  <h3>樹懶法師：符文塔防</h3>
+  <div class="meta"><span>塔防</span><span>符文融合</span><span>30 波</span><span>無盡模式</span></div>
+  <p>火、冰、雷三種符文可以疊在同一座塔上：火＋冰是蒸汽、火＋雷是熔雷、三種一起就是混沌。
+     在魔物走到法師的午睡房之前，設計出你的元素連鎖。</p>
+  <span class="play">▶ 佈防</span>
+</a>
+
 {{< /rawhtml >}}
