@@ -95,6 +95,10 @@
             transform: translate(-2px, -2px); /* 往左上浮起 */
         }
         
+        /* 內嵌內容不要撐破手機版面 */
+        img, iframe, video, embed { max-width: 100%; }
+        iframe { border: 0; }
+
         /* 手機版 RWD 調整 */
         @media (max-width: 700px) {
             .nav-container {

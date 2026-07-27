@@ -648,7 +648,14 @@ function roundRect(ctx, x, y, w, h, r) {
 /* ---------------- 輸入 ---------------- */
 const Input = {
   hover: null, dragging: false, dragged: false, lastX: 0, lastY: 0, keys: {},
-  handTimer: 0,
+  handTimer: 0, touchUi: false,
+
+  markTouch() {
+    if (this.touchUi) return;
+    this.touchUi = true;
+    document.body.classList.add('touch');
+    if (typeof UI !== 'undefined' && UI.updateBuildBar) UI.updateBuildBar();
+  },
 
   init() {
     const cv = R.cv;
@@ -691,16 +698,37 @@ const Input = {
       clampCam();
     }, { passive: false });
 
-    // 觸控：拖曳平移 + 點擊放置
-    let touchStart = null, moved = false;
+    // 觸控：拖曳平移 + 點擊放置 + 雙指縮放
+    let touchStart = null, moved = false, pinch = null;
+    const pinchInfo = ts => {
+      const a = ts[0], b = ts[1];
+      return {
+        d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY),
+        cx: (a.clientX + b.clientX) / 2, cy: (a.clientY + b.clientY) / 2
+      };
+    };
     cv.addEventListener('touchstart', e => {
       if (!Sound.ctx) Sound.init();
+      this.markTouch();
+      if (e.touches.length >= 2) { pinch = pinchInfo(e.touches); moved = true; e.preventDefault(); return; }
       const t = e.touches[0];
       touchStart = { x: t.clientX, y: t.clientY }; moved = false;
       this.lastX = t.clientX; this.lastY = t.clientY;
       e.preventDefault();
     }, { passive: false });
     cv.addEventListener('touchmove', e => {
+      if (e.touches.length >= 2) {
+        const p = pinchInfo(e.touches);
+        if (pinch && pinch.d > 0) {
+          const before = R.s2w(p.cx, p.cy);
+          G.cam.zoom = clamp(G.cam.zoom * (p.d / pinch.d), 0.45, 2.4);
+          const after = R.s2w(p.cx, p.cy);
+          G.cam.x += before.x - after.x; G.cam.y += before.y - after.y;
+          clampCam();
+        }
+        pinch = p; moved = true; e.preventDefault();
+        return;
+      }
       const t = e.touches[0];
       const dx = (t.clientX - this.lastX) / G.cam.zoom, dy = (t.clientY - this.lastY) / G.cam.zoom;
       if (Math.abs(t.clientX - touchStart.x) + Math.abs(t.clientY - touchStart.y) > 8) moved = true;
@@ -709,6 +737,7 @@ const Input = {
       clampCam(); e.preventDefault();
     }, { passive: false });
     cv.addEventListener('touchend', e => {
+      if (e.touches.length === 0) pinch = null;
       if (!moved && touchStart) {
         const w = R.s2w(touchStart.x, touchStart.y);
         const x = Math.floor(w.x / TS), y = Math.floor(w.y / TS);
@@ -716,6 +745,24 @@ const Input = {
       }
       e.preventDefault();
     }, { passive: false });
+
+    // 縮放按鈕（觸控裝置才顯示）
+    const zoomBy = f => {
+      const cx = innerWidth / 2, cy = innerHeight / 2;
+      const before = R.s2w(cx, cy);
+      G.cam.zoom = clamp(G.cam.zoom * f, 0.45, 2.4);
+      const after = R.s2w(cx, cy);
+      G.cam.x += before.x - after.x; G.cam.y += before.y - after.y;
+      clampCam();
+    };
+    const zb = (id, f) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('click', () => zoomBy(f));
+      el.addEventListener('touchstart', e => { e.preventDefault(); this.markTouch(); zoomBy(f); }, { passive: false });
+    };
+    zb('zIn', 1.25); zb('zOut', 0.8);
+    window.addEventListener('touchstart', () => this.markTouch(), { passive: true });
 
     window.addEventListener('keydown', e => {
       const k = e.key.toLowerCase();
@@ -839,7 +886,7 @@ const UI = {
         <div class="cost ${afford ? '' : 'no'}">${locked ? '需研究' : cost}</div>
       </div>`;
     }).join('') + `<div class="bcard" id="rotBtn"><div class="ic">${DIR_NAME[G.dir]}</div>
-        <div class="nm">方向</div><div class="cost">按 R 旋轉</div></div>`;
+        <div class="nm">方向</div><div class="cost">${Input.touchUi ? '點我旋轉' : '按 R 旋轉'}</div></div>`;
     el.querySelectorAll('.bcard[data-t]').forEach(c => {
       c.onclick = () => this.selectTool(c.dataset.t);
       c.onmouseenter = e => this.showTip(e, `<b>${BUILDINGS[c.dataset.t].name}</b><br>${BUILDINGS[c.dataset.t].desc}`);

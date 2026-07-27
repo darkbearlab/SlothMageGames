@@ -1,0 +1,4 @@
+# Hugo 建置產出（部署由 GitHub Actions 重新編譯）
+/public/
+/resources/
+.hugo_build.lock
