@@ -50,6 +50,9 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
 .g-adtrap{background:linear-gradient(150deg,#182430,#101820 60%,#2a2012)}
 .g-adtrap h3{color:#ffb03c}
 .g-adtrap .play{background:linear-gradient(180deg,#4a3410,#2c1f08);border:2px solid #8a6a2c;color:#ffd9a0}
+.g-potion{background:linear-gradient(150deg,#181c33,#0e1020 60%,#241a3a)}
+.g-potion h3{color:#8ab4ff}
+.g-potion .play{background:linear-gradient(180deg,#2f3a66,#1c2240);border:2px solid #4a5a9c;color:#dce6ff}
 </style>
 
 <div class="mlegend">
@@ -136,6 +139,19 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <div class="mnote">手機：三種關卡都是直式版面、全部用點的（點針拔出來、點車開走、點道具救人）。
      本來就是模仿手機廣告，當然要在手機上玩才對味——<b>這款最推薦用手機開</b>。</div>
   <span class="play">▶ 開始玩（真的）</span>
+</a>
+
+<a class="gcard g-potion" href="/SlothMageGames/games/sloth-potions/">
+  <div class="tagline">PUZZLE · SORTING</div>
+  <h3>樹懶法師的分裝魔藥</h3>
+  <div class="meta"><span class="mtag m-best">📱 手機優先</span><span>水排序</span><span>程序生成</span><span>保證有解</span><span>無盡模式</span></div>
+  <p>法師熬了一整年的魔藥，然後把它們全倒進同一批瓶子裡就睡著了。
+     把每種顏色倒回自己的瓶子——一瓶湊齊同色就會被收走，收到桌上一瓶不剩為止。
+     從三色開始，一路加到十四色、瓶子加深到六格；另有一個永遠打不完的無盡挑戰。</p>
+  <div class="mnote">手機：點一瓶選起來、再點另一瓶就倒過去，瓶子會自動排成剛好塞滿螢幕的格狀。
+     每一關都是<b>現場隨機生成、再用內建求解器驗證過</b>才端出來的，所以不會遇到無解的關卡；
+     提示和「這一步之後就解不開了」的警告也是同一個求解器算的。</div>
+  <span class="play">▶ 開始分裝</span>
 </a>
 
 {{< /rawhtml >}}

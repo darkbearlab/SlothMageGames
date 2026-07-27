@@ -146,3 +146,23 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 {{< /rawhtml >}}
 
 ---
+
+### 9. 樹懶法師的分裝魔藥 (Sloth Potions)
+水排序解謎：把混在一起的魔藥倒回同色的瓶子裡，一瓶湊齊同色就收走。
+關卡從三色四格一路長到十四色六格，**全部由程式現場生成、再用內建求解器驗證過**，
+所以不會出現無解的關卡；另有一個難度只升不降的無盡挑戰。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#181c33,#0e1020);color:#e9ecff">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#8d96c4">PUZZLE · SORTING</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#8ab4ff">樹懶法師的分裝魔藥</div>
+  <div style="font-size:.9rem;color:#b3bce4;line-height:1.7;margin-bottom:1rem">
+    關卡模式（無限復原＋提示）· 無盡挑戰（每關 3 次復原、走進死路就結束）<br>
+    同一個求解器負責三件事：驗證關卡有解、給提示、判斷你是不是已經倒不回來了。
+  </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(80,220,140,.16);border:1px solid rgba(80,220,140,.55);color:#7fe6ac">📱 手機優先</span>　觸控：點一瓶再點另一瓶，版面會自動排成塞滿螢幕的格狀</div>
+  <a href="/SlothMageGames/games/sloth-potions/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#2f3a66,#1c2240);border:2px solid #4a5a9c;color:#dce6ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---
