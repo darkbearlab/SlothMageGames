@@ -86,6 +86,17 @@ Into the Breach 式戰棋：敵人攻擊全預告，核心是推撞（撞牆雙�
 - 測試：scratchpad/`test-idle.js`、`test-idle2.js`（離線收益與 max 購買）
 - 注意：測離線收益時 beforeunload 會覆寫 lastSave，直接呼叫 applyOffline() 比較準
 
+## 遊戲 7（完成）：《你在廣告裡看到的那個遊戲》Ad Trap
+路徑：`static/games/ad-trap/`（index.html + js/{pin,parking,save,main}.js）
+把手遊廣告的三種經典關卡做成合集：
+- 拔針（`pin.js`）：自寫圓形剛體物理（重力/球球分離/AABB/單向斜坡），5 關，
+  每關存 `solution` 陣列，測試腳本會照著拔一遍驗證可解，另有陷阱測試驗證錯誤順序會失敗
+- 停車場（`parking.js`）：6 關，關卡用 `parkgen.js` 隨機生成 + BFS 求解器篩選，
+  內建 `solvable()` / `validate()` 供測試呼叫
+- 選道具（`save.js`）：10 幕選擇題喜劇，純 DOM
+- 全破後有「假下載完整版」的結局梗（純畫面演出，不會下載任何東西）
+- 測試：scratchpad/`pintest.js`（可解）、`pintrap.js`（陷阱）、`parktest.js`、`test-adtrap.js`（整合）
+
 ## 尚未做但可以做的（若還有時間）
 - 遊戲 7：物理／解謎類（例如彈射、繩索、重力）
 - 深淵輪迴：更多職業技能、詞綴、成就系統

@@ -37,6 +37,9 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
 .g-idle{background:linear-gradient(150deg,#191527,#0f0d18 60%,#1e1830)}
 .g-idle h3{color:#8ab6ff}
 .g-idle .play{background:linear-gradient(180deg,#2a3560,#161c34);border:2px solid #4a5a9c;color:#c0d4ff}
+.g-adtrap{background:linear-gradient(150deg,#182430,#101820 60%,#2a2012)}
+.g-adtrap h3{color:#ffb03c}
+.g-adtrap .play{background:linear-gradient(180deg,#4a3410,#2c1f08);border:2px solid #8a6a2c;color:#ffd9a0}
 </style>
 
 <a class="gcard g-abyss" href="/SlothMageGames/games/sloth-abyss/">
@@ -92,6 +95,15 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
   <p>樹懶法師的修行方式是：什麼都不做。買下蒲團、法陣、學徒、星辰觀測台，
      它們會替你累積魔力——連你關掉分頁的時候也會。累積夠了就頓悟轉生，換永久加成再來一輪。</p>
   <span class="play">▶ 開始（不）修行</span>
+</a>
+
+<a class="gcard g-adtrap" href="/SlothMageGames/games/ad-trap/">
+  <div class="tagline">PUZZLE · PARODY</div>
+  <h3>你在廣告裡看到的那個遊戲</h3>
+  <div class="meta"><span>拔針</span><span>停車場</span><span>選道具</span><span>21 關</span></div>
+  <p>手遊廣告裡演的那些關卡——拔錯針被岩漿淹死、停車場永遠喬不出來、選錯道具讓主角當場去世——
+     下載後往往根本找不到。所以這裡直接把它們做出來了：沒有廣告、沒有內購、沒有三消。</p>
+  <span class="play">▶ 開始玩（真的）</span>
 </a>
 
 {{< /rawhtml >}}

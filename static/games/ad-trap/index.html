@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📱%3C/text%3E%3C/svg%3E">
+<title>你在廣告裡看到的那個遊戲 | The Game From That Ad</title>
+<meta name="description" content="拔針救人、停車場疏導、選對道具——那些手遊廣告裡演的關卡，這次是真的可以玩的。">
+<style>
+:root{
+  --bg:#101820;--panel:#182430;--panel2:#22303e;--line:#2e4152;
+  --text:#e8f0f6;--dim:#89a0b3;--gold:#ffd45e;--ok:#5fe08a;--bad:#ff6b6b;--acc:#ffb03c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Noto Sans TC',-apple-system,'Segoe UI',system-ui,sans-serif;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit}
+.hidden{display:none!important}
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+
+/* ---- 頂列 ---- */
+#top{height:52px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:14px;
+  border-bottom:1px solid var(--line);background:rgba(10,16,22,.9);flex-wrap:wrap;z-index:5}
+#top .lg{font-weight:900;color:var(--acc);white-space:nowrap}
+#top .sp{flex:1}
+#top button{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;
+  padding:7px 13px;font-size:13px;cursor:pointer;font-weight:700;white-space:nowrap}
+#top button:hover{border-color:var(--acc);color:var(--acc)}
+#lvlName{color:var(--dim);font-size:13px}
+
+/* ---- 遊戲選單 ---- */
+#menu{flex:1;overflow-y:auto;padding:26px 16px 40px}
+.mwrap{max-width:820px;margin:0 auto}
+.htitle{text-align:center;margin-bottom:6px}
+.htitle h1{font-size:clamp(24px,5vw,38px);margin:0;letter-spacing:1px;
+  background:linear-gradient(180deg,#fff0c0,#ffb03c 65%,#e05a2c);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+.htitle .sub{font-size:12px;letter-spacing:4px;color:var(--dim);margin-top:6px}
+.blurb{font-size:13px;line-height:1.9;color:#b6c9d8;text-align:center;margin:16px auto 26px;max-width:560px}
+.gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.gcard{border:2px solid var(--line);border-radius:14px;padding:16px;background:var(--panel);
+  cursor:pointer;transition:.14s;position:relative;overflow:hidden}
+.gcard:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:0 12px 28px rgba(0,0,0,.5)}
+.gcard .big{font-size:40px;line-height:1}
+.gcard h3{margin:8px 0 4px;font-size:17px}
+.gcard p{margin:0;font-size:12px;color:var(--dim);line-height:1.7}
+.gcard .prog{margin-top:10px;font-size:11px;color:var(--ok);font-weight:700}
+.gcard .tagline{position:absolute;top:10px;right:12px;font-size:10px;color:var(--dim);letter-spacing:2px}
+
+/* ---- 遊戲畫面 ---- */
+.stage{flex:1;display:flex;flex-direction:column;min-height:0}
+.board{flex:1;display:flex;align-items:center;justify-content:center;padding:8px;min-height:0}
+canvas{display:block;touch-action:none;border-radius:12px;background:#0b1117;
+  box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 0 1px var(--line)}
+#hint,#hint2{text-align:center;font-size:13px;color:var(--dim);padding:4px 12px 10px;line-height:1.6;min-height:22px}
+
+/* ---- 關卡列 ---- */
+#lvls,#lvls2,#lvls3{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:8px 12px 12px;
+  border-top:1px solid var(--line);background:rgba(10,16,22,.6)}
+.lv{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--panel);
+  color:var(--dim);font-size:13px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lv:hover{border-color:var(--acc);color:var(--acc)}
+.lv.on{border-color:var(--gold);color:var(--gold);background:#2a2415}
+.lv.done{color:var(--ok);border-color:#2f6b4a}
+
+/* ---- 選擇題遊戲 ---- */
+#scene{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:16px;gap:14px;text-align:center;min-height:0;overflow-y:auto}
+#sceneArt{font-size:clamp(56px,14vw,96px);line-height:1.1;position:relative;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
+#sceneArt.shake{animation:sh .5s}
+@keyframes sh{0%,100%{transform:none}20%{transform:translateX(-10px) rotate(-6deg)}
+  60%{transform:translateX(10px) rotate(6deg)}}
+#sceneText{font-size:16px;font-weight:700;max-width:520px;line-height:1.7}
+#sceneSub{font-size:13px;color:var(--dim);max-width:520px;line-height:1.7}
+#choices{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.choice{width:104px;height:104px;border-radius:16px;border:2px solid var(--line);background:var(--panel);
+  font-size:42px;cursor:pointer;transition:.13s;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px}
+.choice:hover{transform:translateY(-5px) scale(1.04);border-color:var(--acc)}
+.choice small{font-size:11px;color:var(--dim)}
+.choice.right{border-color:var(--ok);background:#16301f}
+.choice.wrong{border-color:var(--bad);background:#301616}
+.choice:disabled{cursor:default;transform:none}
+
+/* ---- 結果彈窗 ---- */
+#modal{position:fixed;inset:0;background:rgba(5,9,13,.92);z-index:30;display:flex;align-items:center;
+  justify-content:center;padding:18px;overflow:auto}
+.mbox{max-width:560px;background:linear-gradient(180deg,#1c2836,#111a23);border:1px solid var(--line);
+  border-radius:18px;padding:26px 28px;text-align:center;animation:pin .22s}
+@keyframes pin{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.mbox h1{margin:0 0 6px;font-size:26px;color:var(--acc)}
+.mbox .sub{font-size:11px;letter-spacing:5px;color:var(--dim);margin-bottom:14px}
+.mbox p,.mbox li{font-size:13px;line-height:1.9;color:#b6c9d8;text-align:left}
+.mbox ul{padding-left:20px;margin:8px 0}
+.mbox b{color:var(--gold)}
+.bigbtn{display:block;width:100%;margin-top:14px;padding:13px;border-radius:11px;
+  background:linear-gradient(180deg,#4a3410,#2c1f08);border:1px solid #8a6a2c;color:#ffd9a0;
+  font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer}
+.bigbtn:hover{border-color:var(--gold);color:#fff}
+.subbtn{display:block;width:100%;margin-top:8px;padding:10px;border-radius:10px;background:var(--panel2);
+  border:1px solid var(--line);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
+.subbtn:hover{border-color:var(--acc);color:var(--acc)}
+
+/* ---- 假下載梗 ---- */
+#fakeStore{max-width:420px;text-align:left}
+.storecard{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:14px;
+  padding:14px;background:var(--panel)}
+.storecard .icon{width:64px;height:64px;border-radius:16px;flex:none;font-size:34px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(150deg,#ffb03c,#e05a2c)}
+.storecard .t{font-weight:900;font-size:15px}
+.storecard .d{font-size:11px;color:var(--dim);line-height:1.6}
+#dlBar{height:10px;border-radius:5px;background:#0d151c;border:1px solid var(--line);overflow:hidden;margin-top:14px}
+#dlFill{height:100%;width:0%;background:linear-gradient(90deg,#ffd45e,#ff8a3c);transition:width .2s}
+#dlText{font-size:12px;color:var(--dim);margin-top:8px;text-align:center;min-height:18px}
+
+#toasts{position:fixed;top:60px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;
+  gap:6px;align-items:center;z-index:25;pointer-events:none}
+.toast{background:rgba(10,16,22,.96);border:1px solid var(--acc);color:var(--acc);border-radius:8px;
+  padding:7px 15px;font-size:13px;font-weight:700}
+@media(max-width:700px){
+  .choice{width:88px;height:88px;font-size:34px}
+  #top{height:auto;padding:6px 10px;gap:8px;font-size:12px}
+  #top button{padding:5px 10px;font-size:12px}
+  .lv{width:30px;height:30px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="top">
+    <span class="lg">📱 廣告裡的那個遊戲</span>
+    <span id="lvlName"></span>
+    <span class="sp"></span>
+    <button id="btnRestart" class="hidden">重來這關</button>
+    <button id="btnMenu" class="hidden">回選單</button>
+    <button id="btnHelp">說明</button>
+  </div>
+
+  <!-- 選單 -->
+  <div id="menu">
+    <div class="mwrap">
+      <div class="htitle">
+        <h1>你在廣告裡看到的那個遊戲</h1>
+        <div class="sub">T H E &nbsp; G A M E &nbsp; F R O M &nbsp; T H A T &nbsp; A D</div>
+      </div>
+      <p class="blurb">
+        手遊廣告裡演的那些關卡——拔錯針被岩漿淹死、停車場永遠喬不出來、
+        選錯道具讓主角當場去世——下載後往往根本找不到。<br>
+        所以這裡直接把它們做出來了。<b style="color:var(--gold)">沒有廣告、沒有內購、沒有三消。</b>
+      </p>
+      <div class="gcards" id="gameCards"></div>
+    </div>
+  </div>
+
+  <!-- 拔針 -->
+  <div id="pinStage" class="stage hidden">
+    <div class="board" id="boardPin"><canvas id="pinCv"></canvas></div>
+    <div id="hint"></div>
+    <div id="lvls"></div>
+  </div>
+
+  <!-- 停車場 -->
+  <div id="parkStage" class="stage hidden">
+    <div class="board" id="boardPark"><canvas id="parkCv"></canvas></div>
+    <div id="hint2"></div>
+    <div id="lvls2"></div>
+  </div>
+
+  <!-- 選擇題 -->
+  <div id="saveStage" class="stage hidden">
+    <div id="scene">
+      <div id="sceneArt"></div>
+      <div id="sceneText"></div>
+      <div id="sceneSub"></div>
+      <div id="choices"></div>
+    </div>
+    <div id="lvls3"></div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<div id="modal" class="hidden"><div class="mbox" id="mbox"></div></div>
+
+<script src="js/pin.js"></script>
+<script src="js/parking.js"></script>
+<script src="js/save.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
