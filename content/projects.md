@@ -121,3 +121,21 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 {{< /rawhtml >}}
 
 ---
+
+### 8. 你在廣告裡看到的那個遊戲 (The Game From That Ad)
+把手遊廣告最愛演的三種關卡真的做出來：拔針物理、停車場疏導、選對道具。
+三種模式共 21 關，附贈一個關於「完整版」的結局。
+
+{{< rawhtml >}}
+<div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#182430,#101820);color:#e8f0f6">
+  <div style="font-size:.75rem;letter-spacing:4px;color:#89a0b3">PUZZLE · PARODY</div>
+  <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#ffb03c">你在廣告裡看到的那個遊戲</div>
+  <div style="font-size:.9rem;color:#b6c9d8;line-height:1.7;margin-bottom:1rem">
+    拔針救法師（物理）· 停車場大逃殺（邏輯）· 選對道具救法師（選擇題）<br>
+    每一關都經過自動求解驗證，保證有解。
+  </div>
+  <a href="/SlothMageGames/games/ad-trap/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#4a3410,#2c1f08);border:2px solid #8a6a2c;color:#ffd9a0;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
+</div>
+{{< /rawhtml >}}
+
+---
