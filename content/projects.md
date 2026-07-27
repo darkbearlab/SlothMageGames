@@ -130,7 +130,7 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
 
 ### 8. 你在廣告裡看到的那個遊戲 (The Game From That Ad)
 把手遊廣告最愛演的三種關卡真的做出來：拔針物理、停車場疏導、選對道具。
-三種模式共 21 關，附贈一個關於「完整版」的結局。
+三種模式共 58 關，附贈一個關於「完整版」的結局。
 
 {{< rawhtml >}}
 <div style="margin:1.2rem 0;padding:1.2rem 1.4rem;border:2px solid #333;border-radius:12px;background:linear-gradient(180deg,#182430,#101820);color:#e8f0f6">

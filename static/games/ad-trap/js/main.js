@@ -140,9 +140,10 @@ const HUB = {
       this.mark('pin', PIN.index);
       this.win(PIN.index, PIN.LEVELS.length, '金幣全數送達，法師依然沒有醒。');
     } else {
-      this.fail(reason === 'lava'
-        ? '岩漿把寶藏（和法師的眉毛）燒掉了。'
-        : '金幣沒有全部送到法師那裡，針也拔完了。');
+      this.fail(
+        reason === 'lava' ? '岩漿把寶藏（和法師的眉毛）燒掉了。'
+          : reason === 'lost' ? '有金幣掉進了深淵。它不會再回來了。'
+            : '金幣沒有全部送到法師那裡，針也拔完了。');
     }
   },
   parkEnd(st, moves) {
@@ -185,9 +186,11 @@ const HUB = {
       <div class="sub">A B O U T</div>
       <p>手遊廣告最愛演的那三種關卡，這裡是真的可以玩的版本：</p>
       <ul>
-        <li><b>拔針</b>：點針把它抽掉。金幣要全部落進虛線框；岩漿碰到法師或掉進框裡就失敗。斜的那塊也是針，拔掉會改變東西流向。</li>
-        <li><b>停車場</b>：點車，它就往車頭箭頭方向開出去；紅框代表前面被擋住。</li>
-        <li><b>選道具</b>：三選一。選錯會有很好的下場（對觀眾而言）。</li>
+        <li><b>拔針</b>：點針把它抽掉。金幣要全部落進虛線框；岩漿碰到法師或掉進框裡就失敗。
+          斜的那塊也是針，拔掉會改變東西流向。<b>暗紅色的洞是深淵</b>——岩漿倒進去正好，金幣掉進去就沒了。</li>
+        <li><b>停車場</b>：點車，它就往車頭箭頭方向開出去；紅框代表前面被擋住。
+          灰色的 ▧ 是水泥柱，永遠不會動。後面的關卡場地會變大。</li>
+        <li><b>選道具</b>：三選一（偶爾四選一）。選錯會有很好的下場（對觀眾而言）。</li>
       </ul>
       <p class="dim" style="font-size:12px">沒有廣告、沒有內購、沒有登入、沒有三消。進度存在你自己的瀏覽器裡。</p>
       <button class="bigbtn" id="mClose">知道了</button>`);
@@ -243,7 +246,7 @@ const HUB = {
       <p style="text-align:center"><b>咦？這是三消遊戲。</b><br>廣告裡那三關呢？</p>
       <p style="text-align:center;color:var(--dim);font-size:12px;line-height:2">
         （開玩笑的，什麼都沒有下載。<br>
-        你剛剛玩的就是完整版：3 種模式、21 個關卡、0 個廣告、0 元。）</p>
+        你剛剛玩的就是完整版：3 種模式、58 個關卡、0 個廣告、0 元。）</p>
       <button class="bigbtn" id="mBack">回選單</button>`);
     $('mBack').onclick = () => this.showMenu();
   },
