@@ -130,7 +130,7 @@ description: "可以直接在瀏覽器裡玩的小遊戲。免安裝、免註冊
 <a class="gcard g-adtrap" href="/SlothMageGames/games/ad-trap/">
   <div class="tagline">PUZZLE · PARODY</div>
   <h3>你在廣告裡看到的那個遊戲</h3>
-  <div class="meta"><span class="mtag m-best">📱 手機優先</span><span>拔針</span><span>停車場</span><span>選道具</span><span>21 關</span></div>
+  <div class="meta"><span class="mtag m-best">📱 手機優先</span><span>拔針</span><span>停車場</span><span>選道具</span><span>58 關</span></div>
   <p>手遊廣告裡演的那些關卡——拔錯針被岩漿淹死、停車場永遠喬不出來、選錯道具讓主角當場去世——
      下載後往往根本找不到。所以這裡直接把它們做出來了：沒有廣告、沒有內購、沒有三消。</p>
   <div class="mnote">手機：三種關卡都是直式版面、全部用點的（點針拔出來、點車開走、點道具救人）。
