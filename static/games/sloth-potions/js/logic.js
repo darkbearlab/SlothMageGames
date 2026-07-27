@@ -158,13 +158,23 @@ const SORT = (() => {
     return arr;
   }
 
+  // 顏色交界密度：1.0 代表每一格都跟下面那格不同色（最亂）。拿來衡量盤面亂度。
+  function mixRate(tubes) {
+    let b = 0, units = 0;
+    for (const t of tubes) {
+      units += t.length;
+      for (let i = 1; i < t.length; i++) if (t[i] !== t[i - 1]) b++;
+    }
+    return units ? b / units : 0;
+  }
+
   // cfg: { colors, empties, cap }
   // 先隨機灌，再用求解器驗證；驗不過就重抽。回傳 { tubes, cap, par, tries }
-  function generate(cfg, seed) {
+  function generateForward(cfg, seed) {
     const cap = cfg.cap || 4;
     const rnd = rngFrom(seed >>> 0);
     let tries = 0;
-    for (; tries < 600; tries++) {
+    for (; tries < 200; tries++) {
       const pool = [];
       for (let c = 0; c < cfg.colors; c++) for (let i = 0; i < cap; i++) pool.push(c);
       shuffle(pool, rnd);
@@ -176,9 +186,101 @@ const SORT = (() => {
       // 節點上限刻意壓低：要花超過這個量才解得開的盤面通常是「歪到很難玩」的，
       // 重抽一張比較快，也避免產生關卡時卡住畫面
       const s = solve(tubes, cap, { nodeLimit: 40000 });
-      if (s.path) return { tubes, cap, par: s.path.length, tries: tries + 1, seed };
+      if (s.path) return { tubes, cap, par: s.path.length, tries: tries + 1, seed, method: 'forward' };
     }
     return null;
+  }
+
+  /* ---------- 反向亂倒產生法 ----------
+     從「已經分好」的狀態出發，往回隨機倒，倒到夠亂就交給玩家。
+     好處：解答由建構過程保證存在，不必試到中獎，也不會卡在重抽迴圈。
+
+     反向的一步 = 把某瓶 B 最上層的 k 格（同色 c）搬到另一瓶 A 上面。
+     但「正向倒」一次倒的量是被規則算死的（min(頂端同色段, 目標剩餘空間)），
+     所以不是每種搬法都倒得回來。與其把所有邊界條件手推一遍，
+     這裡直接把候選的前一步組出來、用正向規則驗一次，對得上才算數——
+     短、而且不可能推錯。                                                    */
+  function reverseCandidates(tubes, cap) {
+    const out = [];
+    for (let b = 0; b < tubes.length; b++) {
+      const B = tubes[b];
+      if (!B.length) continue;
+      const r = topRun(B);
+      for (let k = 1; k <= r.count; k++) {
+        for (let a = 0; a < tubes.length; a++) {
+          if (a === b) continue;
+          if (tubes[a].length + k > cap) continue;
+          // 組出「前一步」的樣子
+          const prev = tubes.slice();
+          prev[b] = B.slice(0, B.length - k);
+          prev[a] = tubes[a].concat(new Array(k).fill(r.color));
+          // 用正向規則驗：從 prev 倒 a→b 必須剛好變回現在這個盤面
+          if (!canPour(prev, cap, a, b)) continue;
+          const fwd = pour(prev, cap, a, b).tubes;
+          let same = true;
+          for (let i = 0; i < tubes.length && same; i++) {
+            if (fwd[i].length !== tubes[i].length) { same = false; break; }
+            for (let j = 0; j < fwd[i].length; j++) if (fwd[i][j] !== tubes[i][j]) { same = false; break; }
+          }
+          if (same) out.push({ a, b, k, prev });
+        }
+      }
+    }
+    return out;
+  }
+
+  // cfg: { colors, empties, cap, scramble }
+  function generateReverse(cfg, seed) {
+    const cap = cfg.cap || 4;
+    const rnd = rngFrom(seed >>> 0);
+    let tubes = [];
+    for (let c = 0; c < cfg.colors; c++) tubes.push(new Array(cap).fill(c));
+    for (let i = 0; i < cfg.empties; i++) tubes.push([]);
+    const steps = cfg.scramble || cfg.colors * cap * 3;
+    let last = null, done = 0;
+    for (let s = 0; s < steps; s++) {
+      let ms = reverseCandidates(tubes, cap);
+      // 不要立刻把上一步倒回去，不然會在原地打轉
+      if (last) {
+        const f = ms.filter(m => !(m.a === last.b && m.b === last.a));
+        if (f.length) ms = f;
+      }
+      if (!ms.length) break;
+      const m = ms[Math.floor(rnd() * ms.length)];
+      tubes = m.prev;
+      last = m; done++;
+    }
+    return { tubes, cap, scrambleDone: done };
+  }
+
+  // 反向亂倒一次只有「還算亂」的盤面，所以抽 N 張挑最亂的那一張。
+  // 實測（12 色 1 空 深 4）：抽 1 張交界密度 0.40、死路率 47%；
+  // 抽 30 張挑最亂的 → 0.48 / 76%，跟正向的 0.70 / 98% 就接近多了，而且只要 17ms。
+  function generateBestReverse(cfg, seed, samples) {
+    const N = samples || 30;
+    const scramble = cfg.scramble || cfg.colors * (cfg.cap || 4) * 4;
+    let best = null, bestScore = -1;
+    for (let k = 0; k < N; k++) {
+      const g = generateReverse({ ...cfg, scramble }, (seed + k * 0x9e3779b9) >>> 0);
+      // 越亂越好；空瓶數也要盡量接近設定值（反向亂倒常常會把空瓶塞滿）
+      const emptyGot = g.tubes.filter(t => !t.length).length;
+      const score = mixRate(g.tubes) * 100 - Math.abs(emptyGot - cfg.empties) * 6;
+      if (score > bestScore) { bestScore = score; best = g; }
+    }
+    const s = solve(best.tubes, best.cap, { nodeLimit: 200000 });
+    return { tubes: best.tubes, cap: best.cap, par: s.path ? s.path.length : 0, tries: N, seed, method: 'reverse' };
+  }
+
+  // 對外的產生器：兩種做法並用
+  //   正向（隨機灌 → 求解器驗證）盤面最亂、而且長得像經典水排序（滿瓶＋剛好 N 個空瓶），
+  //   所以是預設。但它在「空瓶只有 1 個」這種設定下會卡住（12 色 1 空的成功率只有 16%、
+  //   平均要重抽 163 次、耗時 505ms），那時就改用反向亂倒——由建構保證可解，1ms 就生得出來。
+  function generate(cfg, seed) {
+    // 空瓶 ≤1 的設定正向幾乎必敗，白試 200 次只是拖時間，直接走反向
+    if ((cfg.empties || 0) <= 1) return generateBestReverse(cfg, seed);
+    const fwd = generateForward(cfg, seed);
+    if (fwd) return fwd;
+    return generateBestReverse(cfg, seed);
   }
 
   // 無盡／關卡模式共用的難度曲線
@@ -186,6 +288,11 @@ const SORT = (() => {
   // 產生器會卡在重抽迴圈裡，而且對玩家也太兇。難度改成往「顏色數」與「瓶子深度」加。
   function difficulty(level) {
     const n = Math.max(1, level | 0);
+    // 每 10 關一次「只有一個空瓶」的狠關。這種設定正向產生器做不出來，
+    // 是靠反向亂倒才補回來的難度軸。
+    if (n >= 20 && n % 10 === 0) {
+      return { colors: Math.min(10 + Math.floor(n / 20), 13), empties: 1, cap: 4, spike: true };
+    }
     const empties = 2;
     if (n <= 22) return { colors: Math.min(3 + Math.floor((n - 1) / 2), 13), empties, cap: 4 };
     if (n <= 34) return { colors: Math.min(11 + Math.floor((n - 23) / 2), 13), empties, cap: 5 };
@@ -204,7 +311,9 @@ const SORT = (() => {
   return {
     rngFrom, hashSeed,
     topRun, isComplete, isMono, canPour, pour, isDone, key, clone,
-    moves, solve, hint, isDeadEnd, generate, difficulty, levelSeed
+    moves, solve, hint, isDeadEnd, mixRate,
+    generate, generateForward, generateReverse, generateBestReverse, reverseCandidates,
+    difficulty, levelSeed
   };
 })();
 

@@ -210,9 +210,10 @@ const G = {
       });
       this.clearToasts();
       this.syncHud();
-      this.setMsg(this.mode === 'endless'
+      const spike = cfg.spike ? '★ 狠關：只有 1 個空瓶　' : '';
+      this.setMsg(spike + (this.mode === 'endless'
         ? `第 ${n} 關 · ${cfg.colors} 色 · 瓶深 ${g.cap} · 復原還有 ${this.undosLeft} 次`
-        : `第 ${n} 關 · ${cfg.colors} 色 · 瓶深 ${g.cap} · 參考步數 ${g.par}`);
+        : `第 ${n} 關 · ${cfg.colors} 色 · 瓶深 ${g.cap} · 參考步數 ${g.par}`), !!cfg.spike);
       this.ready = true;
       this.loadSeq = (this.loadSeq || 0) + 1;
     }, 20);
