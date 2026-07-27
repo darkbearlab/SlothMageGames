@@ -67,6 +67,24 @@ canvas#game{position:fixed;inset:0;display:block;cursor:crosshair;touch-action:n
 .sk-cd{position:absolute;left:0;bottom:0;width:100%;height:0%;background:rgba(10,8,20,.78);
   border-radius:0 0 6px 6px;transition:height .08s linear}
 
+/* 觸控專用按鈕（偵測到觸控輸入才顯示） */
+#touchbtns{position:absolute;right:10px;bottom:88px;display:none;gap:8px;pointer-events:auto}
+body.touch #touchbtns{display:flex}
+body.touch #buffs{bottom:152px}
+.tbtn{width:54px;height:54px;border:2px solid #443c5c;border-radius:50%;
+  background:linear-gradient(180deg,#241f33,#15121d);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:19px;color:#e8e4f0;line-height:1;
+  box-shadow:0 3px 10px rgba(0,0,0,.7);cursor:pointer;
+  user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.tbtn small{font-size:9px;letter-spacing:1px;color:#a89ec0;margin-top:3px}
+.tbtn.press{transform:scale(.9)}
+#tbUse{border-color:#8a5a2c;background:linear-gradient(180deg,#3d2a16,#1f1610)}
+#tbUse.off{opacity:.32;filter:grayscale(1)}
+#tbUse.on{border-color:var(--gold)}
+#tbUse.on small{color:var(--gold)}
+#tbUse.on{animation:tbPulse 1.1s infinite}
+@keyframes tbPulse{0%,100%{box-shadow:0 0 10px rgba(255,200,90,.35)}50%{box-shadow:0 0 22px rgba(255,200,90,.8)}}
+
 #potionSlots{position:absolute;bottom:22px;left:136px;display:flex;gap:8px}
 .pot{width:40px;height:40px;border:2px solid #443c5c;border-radius:6px;background:#191523;
   display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:16px}
@@ -305,6 +323,11 @@ kbd{background:#241f32;border:1px solid #453c5c;border-bottom-width:3px;border-r
     <div class="pot">🔵<span id="manaCount">0</span></div>
   </div>
   <div id="skillbar"></div>
+  <div id="touchbtns">
+    <div class="tbtn" id="tbPause">⏸<small>暫停</small></div>
+    <div class="tbtn" id="tbInv">🎒<small>背包</small></div>
+    <div class="tbtn off" id="tbUse">✋<small>互動</small></div>
+  </div>
   <div id="upgradeFlash" class="hidden">▲ 背包中有更好的裝備</div>
 </div>
 

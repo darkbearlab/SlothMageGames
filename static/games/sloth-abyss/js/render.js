@@ -4,6 +4,9 @@
    =========================================================== */
 'use strict';
 
+// 互動提示：鍵盤顯示 [F]，觸控顯示 HUD 上的互動鍵圖示
+function fkey() { return (typeof Game !== 'undefined' && Game.touchMode) ? '[✋]' : '[F]'; }
+
 const Render = {
   canvas: null, ctx: null, w: 0, h: 0, dpr: 1, zoom: 1.4,
   lightCanvas: null, lctx: null,
@@ -205,7 +208,7 @@ const Render = {
         const glow = 0.4 + Math.sin(G.time * 3) * 0.2;
         ctx.fillStyle = `rgba(150,200,255,${glow})`;
         ctx.beginPath(); ctx.ellipse(p.x, p.y + 2, 20, 9, 0, 0, TAU); ctx.fill();
-        this.label(ctx, p.x, p.y - 34, '下一層 [F]', '#9ad0ff');
+        this.label(ctx, p.x, p.y - 34, '下一層 ' + fkey(), '#9ad0ff');
       } else if (p.kind === 'chest') {
         ctx.fillStyle = 'rgba(0,0,0,0.45)';
         ctx.beginPath(); ctx.ellipse(p.x, p.y + 10, 20, 8, 0, 0, TAU); ctx.fill();
@@ -219,7 +222,7 @@ const Render = {
           const g = 0.3 + Math.sin(G.time * 4) * 0.15;
           ctx.fillStyle = `rgba(255,212,94,${g})`;
           ctx.beginPath(); ctx.arc(p.x, p.y, 26, 0, TAU); ctx.fill();
-          this.label(ctx, p.x, p.y - 30, '寶箱 [F]', '#ffd45e');
+          this.label(ctx, p.x, p.y - 30, '寶箱 ' + fkey(), '#ffd45e');
         }
       } else if (p.kind === 'shrine') {
         const c = p.used ? '#555' : p.def.color;
@@ -232,7 +235,7 @@ const Render = {
         if (!p.used) {
           ctx.fillStyle = withAlpha(c, 0.25);
           ctx.beginPath(); ctx.arc(p.x, p.y - 14 + bob, 22 + Math.sin(G.time * 3) * 4, 0, TAU); ctx.fill();
-          this.label(ctx, p.x, p.y - 40, p.def.name + ' [F]', c);
+          this.label(ctx, p.x, p.y - 40, p.def.name + ' ' + fkey(), c);
         }
       } else if (p.kind === 'shop') {
         ctx.fillStyle = 'rgba(0,0,0,0.45)';
@@ -247,7 +250,7 @@ const Render = {
         ctx.beginPath(); ctx.arc(p.x + 4, p.y - 19 + bob, 2, 0, TAU); ctx.fill();
         ctx.fillStyle = '#d94c8a';
         ctx.fillRect(p.x - 14, p.y - 34 + bob, 28, 6);
-        this.label(ctx, p.x, p.y - 46, '商人 [F]', '#ffd45e');
+        this.label(ctx, p.x, p.y - 46, '商人 ' + fkey(), '#ffd45e');
       } else if (p.kind === 'portal') {
         const g = 0.5 + Math.sin(G.time * 4) * 0.2;
         const grd = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, 40);
@@ -260,7 +263,7 @@ const Render = {
           ctx.fillStyle = '#e0b0ff';
           ctx.beginPath(); ctx.arc(p.x + Math.cos(a) * 24, p.y + Math.sin(a) * 12, 3, 0, TAU); ctx.fill();
         }
-        this.label(ctx, p.x, p.y - 50, '離開深淵 [F]', '#e0b0ff');
+        this.label(ctx, p.x, p.y - 50, '離開深淵 ' + fkey(), '#e0b0ff');
       }
     }
   },

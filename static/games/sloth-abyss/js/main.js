@@ -76,7 +76,7 @@ const Game = {
       Audio.resume();
       const t = e.touches[0];
       this.mouse.x = t.clientX; this.mouse.y = t.clientY;
-      this.mouse.down = true; this.touchMode = true;
+      this.mouse.down = true; this.enterTouchMode();
       e.preventDefault();
     }, { passive: false });
     cv.addEventListener('touchmove', e => {
@@ -85,13 +85,54 @@ const Game = {
       e.preventDefault();
     }, { passive: false });
     cv.addEventListener('touchend', e => { this.mouse.down = false; e.preventDefault(); }, { passive: false });
+    cv.addEventListener('touchcancel', () => { this.mouse.down = false; });
+    // 有任何觸控事件就切到觸控介面（HUD 會長出互動/背包/暫停按鈕）
+    window.addEventListener('touchstart', () => this.enterTouchMode(), { passive: true });
+  },
+
+  // 切換成觸控介面：顯示 HUD 上的觸控按鈕、tooltip 改成點擊顯示
+  enterTouchMode() {
+    this.touchMode = true;
+    if (!this._touchUi) { this._touchUi = true; document.body.classList.add('touch'); }
   },
 
   useSkillSlot(i) {
     if (this.state !== 'play' || !this.player) return;
     const id = this.player.skillList[i];
     if (!id) return;
-    this.player.castSkill(id, this.mouse.wx, this.mouse.wy, this);
+    let tx = this.mouse.wx, ty = this.mouse.wy;
+    if (this.touchMode) {
+      // 觸控沒有滑鼠指標，技能自動瞄準最近的敵人；沒有敵人就往面向方向放
+      const t = this.nearestEnemy(560);
+      if (t) { tx = t.x; ty = t.y; }
+      else { tx = this.player.x + Math.cos(this.player.facing) * 120; ty = this.player.y + Math.sin(this.player.facing) * 120; }
+    }
+    this.player.castSkill(id, tx, ty, this);
+  },
+
+  nearestEnemy(range) {
+    const p = this.player;
+    if (!p) return null;
+    let best = null, bd = (range || 1e5) * (range || 1e5);
+    for (const e of this.enemies) {
+      if (e.dead) continue;
+      const d = dist2(p.x, p.y, e.x, e.y);
+      if (d < bd) { bd = d; best = e; }
+    }
+    return best;
+  },
+
+  // 玩家腳下可互動的物件（樓梯／寶箱／神龕／商人／傳送門）
+  nearestProp() {
+    const p = this.player;
+    if (!p) return null;
+    for (const o of this.props) {
+      if (dist2(p.x, p.y, o.x, o.y) > o.r * o.r) continue;
+      if (o.kind === 'chest' && o.opened) continue;
+      if (o.kind === 'shrine' && o.used) continue;
+      if (o.kind === 'stairs' || o.kind === 'chest' || o.kind === 'shrine' || o.kind === 'shop' || o.kind === 'portal') return o;
+    }
+    return null;
   },
 
   /* ================= 開始一場 ================= */

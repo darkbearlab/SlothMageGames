@@ -96,6 +96,9 @@ kbd{background:#26203c;border:1px solid #3c3358;border-bottom-width:2px;border-r
   background:linear-gradient(180deg,#412d68,#241a3c);border:1px solid #6a4a9c;color:#e0c0ff;
   font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:inherit}
 .bigbtn:hover{border-color:var(--acc);color:#fff}
+#btnFit.hidden{display:none}
+#btnFit.on{border-color:var(--acc);color:var(--acc)}
+
 @media(max-width:880px){
   #waveinfo{display:none} #side{width:calc(100vw - 24px);right:12px;bottom:auto;max-height:60vh;overflow-y:auto}
   .rune{width:84px}
@@ -118,6 +121,7 @@ kbd{background:#26203c;border:1px solid #3c3358;border-bottom-width:2px;border-r
   <span class="sp"></span>
   <button id="btnWave">▶ 下一波</button>
   <button id="btnSpeed">1x</button>
+  <button id="btnFit" class="hidden">⛶ 全覽</button>
   <button id="btnHelp">?</button>
 </div>
 

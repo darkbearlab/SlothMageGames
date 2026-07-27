@@ -440,6 +440,7 @@ const R = {
     window.addEventListener('resize', () => this.resize());
   },
   pan: { x: 0, y: 0 },
+  fitMode: false,
   resize() {
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.w = window.innerWidth; this.h = window.innerHeight;
@@ -447,10 +448,21 @@ const R = {
     this.cv.style.width = this.w + 'px'; this.cv.style.height = this.h + 'px';
     this.availH = this.h - 140;
     const fit = Math.min((this.w - 24) / (GW * TS), this.availH / (GH * TS), 1.25);
-    // 小螢幕：不要縮到看不見，改成可拖曳平移
+    // 小螢幕：不要縮到看不見，改成可拖曳平移；按「全覽」可以切成整張地圖塞進畫面
     const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-    this.scale = touch ? Math.max(fit, 0.62) : fit;
+    this.scale = (touch && !this.fitMode) ? Math.max(fit, 0.62) : fit;
+    this.fitScale = fit;
+    // 只有在放大模式真的會超出畫面時，全覽鍵才有意義
+    const btn = document.getElementById('btnFit');
+    if (btn) btn.classList.toggle('hidden', !(touch && Math.max(fit, 0.62) > fit + 0.001));
     this.layout();
+  },
+  toggleFit() {
+    this.fitMode = !this.fitMode;
+    this.pan.x = 0; this.pan.y = 0;
+    const btn = document.getElementById('btnFit');
+    if (btn) { btn.classList.toggle('on', this.fitMode); btn.textContent = this.fitMode ? '⛶ 放大' : '⛶ 全覽'; }
+    this.resize();
   },
   layout() {
     const bw = GW * TS * this.scale, bh = GH * TS * this.scale;
@@ -790,6 +802,7 @@ const UI = {
     document.getElementById('btnStart').onclick = () => this.start();
     document.getElementById('btnWave').onclick = () => startWave();
     document.getElementById('btnHelp').onclick = () => document.getElementById('modal').classList.remove('hidden');
+    document.getElementById('btnFit').onclick = () => R.toggleFit();
     document.getElementById('btnSpeed').onclick = () => {
       G.speed = G.speed === 1 ? 2 : (G.speed === 2 ? 3 : 1);
       document.getElementById('btnSpeed').textContent = G.speed + 'x';

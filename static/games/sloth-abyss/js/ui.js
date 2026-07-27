@@ -4,6 +4,9 @@
    =========================================================== */
 'use strict';
 
+const PROP_LABEL = { stairs: '下樓', chest: '開箱', shrine: '神龕', shop: '商人', portal: '離開' };
+const PROP_ICON = { stairs: '🕳', chest: '🎁', shrine: '🔮', shop: '🦥', portal: '🌀' };
+
 const UI = {
   G: null, el: {}, invOpen: false, lastPanel: null,
 
@@ -17,9 +20,47 @@ const UI = {
     this.el.overlay.addEventListener('click', e => {
       if (e.target === this.el.overlay && this.G.state === 'paused') this.togglePause();
     });
+    this.el.overlay.addEventListener('touchstart', e => {
+      if (!e.target.closest('.eq-slot,.inv-item,.shop-item')) this.hideTip();
+    }, { passive: true });
     document.addEventListener('mousemove', e => {
       if (this._tipEl) this.positionTip(e.clientX, e.clientY);
     });
+    this.bindTouchButtons();
+  },
+
+  /* ============ 觸控按鈕 ============ */
+  bindTouchButtons() {
+    const tap = (id, fn) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('touchstart', e => { e.preventDefault(); el.classList.add('press'); }, { passive: false });
+      el.addEventListener('touchend', e => {
+        e.preventDefault(); e.stopPropagation();
+        el.classList.remove('press');
+        fn();
+      }, { passive: false });
+      el.addEventListener('touchcancel', () => el.classList.remove('press'));
+      el.addEventListener('click', fn);
+    };
+    tap('tbPause', () => { if (this.G.state === 'play' || this.G.paused) this.togglePause(); });
+    tap('tbInv', () => { if (this.G.state === 'play' || this.invOpen) this.toggleInventory(); });
+    tap('tbUse', () => { if (this.G.state === 'play') this.G.interact(); });
+    this.el.tbUse = document.getElementById('tbUse');
+  },
+
+  // 同時綁滑鼠 hover 與觸控點擊的 tooltip。
+  // 觸控時：第一下顯示說明，第二下才執行動作（避免誤觸把裝備脫下來）
+  tipBind(el, htmlFn, onActivate) {
+    el.addEventListener('mouseenter', () => this.showTip(el, htmlFn()));
+    el.addEventListener('mouseleave', () => this.hideTip());
+    if (onActivate) el.addEventListener('click', onActivate);
+    el.addEventListener('touchstart', e => {
+      if (e.target.closest('button')) return;   // 讓裡面的小按鈕自己處理
+      e.preventDefault();                        // 擋掉隨後的 click，避免動作跑兩次
+      if (this._tipEl === el) { this.hideTip(); if (onActivate) onActivate(e); }
+      else this.showTip(el, htmlFn());
+    }, { passive: false });
   },
 
   /* ============ 通用 ============ */
@@ -109,6 +150,20 @@ const UI = {
     this.el.manaCount.textContent = p.manaPots;
     const pc2 = document.getElementById('potionCount2');
     if (pc2) pc2.textContent = p.potions;
+    const mc2 = document.getElementById('manaCount2');
+    if (mc2) mc2.textContent = p.manaPots;
+
+    // 觸控互動鍵：亮起並顯示腳下是什麼
+    if (this.el.tbUse) {
+      const o = G.nearestProp ? G.nearestProp() : null;
+      const label = o ? (PROP_LABEL[o.kind] || '互動') : '互動';
+      if (this._tbUseLabel !== label) {
+        this._tbUseLabel = label;
+        this.el.tbUse.innerHTML = (o ? PROP_ICON[o.kind] || '✋' : '✋') + '<small>' + label + '</small>';
+      }
+      this.el.tbUse.classList.toggle('on', !!o);
+      this.el.tbUse.classList.toggle('off', !o);
+    }
 
     // 技能冷卻
     if (this._skillEls) {
@@ -146,19 +201,39 @@ const UI = {
       html += `<div class="skill" data-i="${i}"><div class="sk-cd"></div><div class="sk-icon">${s.icon}</div><div class="sk-key">${SKILL_KEYS[i]}</div><div class="sk-mana">${s.mana}</div></div>`;
     });
     html += `<div class="skill potion" id="potBtn"><div class="sk-icon">🧪</div><div class="sk-key">SPACE</div><div class="sk-count" id="potionCount2"></div></div>`;
+    html += `<div class="skill potion" id="manaBtn"><div class="sk-icon">🔵</div><div class="sk-key">2</div><div class="sk-count" id="manaCount2"></div></div>`;
     this.el.skillbar.innerHTML = html;
     const els = this.el.skillbar.querySelectorAll('.skill[data-i]');
     els.forEach(el => {
       const i = +el.dataset.i;
       const id = p.skillList[i];
       this._skillEls.push({ el, id, cdEl: el.querySelector('.sk-cd') });
+      // 技能鍵在觸控上要「按了就放」，所以不套 tipBind 的兩段式
       el.addEventListener('click', () => this.G.useSkillSlot(i));
-      el.addEventListener('mouseenter', () => this.showTip(el, `<div class="tip-name" style="color:${SKILLS[id].color}">${SKILLS[id].name}</div>
-        <div class="tip-sub">冷卻 ${SKILLS[id].cd}s · 法力 ${SKILLS[id].mana}</div><div class="tip-desc">${SKILLS[id].desc}</div>`));
+      el.addEventListener('touchstart', e => {
+        e.preventDefault();
+        this.G.useSkillSlot(i);
+        this.showTip(el, this.skillTipHtml(id));
+        clearTimeout(this._skTipT);
+        this._skTipT = setTimeout(() => this.hideTip(), 1400);
+      }, { passive: false });
+      el.addEventListener('mouseenter', () => this.showTip(el, this.skillTipHtml(id)));
       el.addEventListener('mouseleave', () => this.hideTip());
     });
-    const pb = document.getElementById('potBtn');
-    if (pb) pb.addEventListener('click', () => this.G.player.usePotion(this.G));
+    const tapBtn = (id, fn) => {
+      const b = document.getElementById(id);
+      if (!b) return;
+      b.addEventListener('click', fn);
+      b.addEventListener('touchstart', e => { e.preventDefault(); fn(); }, { passive: false });
+    };
+    tapBtn('potBtn', () => this.G.player.usePotion(this.G));
+    tapBtn('manaBtn', () => this.G.player.useMana(this.G));
+  },
+
+  skillTipHtml(id) {
+    const s = SKILLS[id];
+    return `<div class="tip-name" style="color:${s.color}">${s.name}</div>
+      <div class="tip-sub">冷卻 ${s.cd}s · 法力 ${s.mana}</div><div class="tip-desc">${s.desc}</div>`;
   },
 
   /* ============ Tooltip ============ */
@@ -451,7 +526,8 @@ const UI = {
       : '<span class="dim">尚未取得天賦</span>';
 
     const pan = this.panel(`
-      <h2 class="panel-title">裝備與背包 <span class="dim small">Esc / I 關閉</span></h2>
+      <h2 class="panel-title">裝備與背包 <span class="dim small">Esc / I 關閉</span>
+        <button class="mini" data-a="closeinv" style="margin-left:10px">✕ 關閉</button></h2>
       <div class="inv-layout">
         <div class="col">
           <h3>裝備</h3>
@@ -472,19 +548,19 @@ const UI = {
       </div>`, 'wide inv-panel');
 
     // 事件
+    const ci = pan.querySelector('[data-a=closeinv]');
+    if (ci) ci.addEventListener('click', () => this.toggleInventory());
     pan.querySelectorAll('.eq-slot').forEach(el => {
       const it = p.gear[el.dataset.slot];
       if (!it) return;
-      el.addEventListener('mouseenter', () => this.showTip(el, this.itemTipHtml(it)));
-      el.addEventListener('mouseleave', () => this.hideTip());
-      el.addEventListener('click', () => { p.unequip(el.dataset.slot); Audio.play('ui'); this.renderInventory(); });
+      this.tipBind(el, () => this.itemTipHtml(it),
+        () => { p.unequip(el.dataset.slot); Audio.play('ui'); this.renderInventory(); });
     });
     pan.querySelectorAll('.inv-item').forEach(el => {
       const it = p.inventory[+el.dataset.i];
       if (!it) return;
       const cur = p.gear[it.slot] || (it.slot === 'ring1' ? p.gear.ring2 : null);
-      el.addEventListener('mouseenter', () => this.showTip(el, this.itemTipHtml(it, cur)));
-      el.addEventListener('mouseleave', () => this.hideTip());
+      this.tipBind(el, () => this.itemTipHtml(it, cur));
     });
     pan.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', e => {
       e.stopPropagation();
@@ -533,8 +609,7 @@ const UI = {
       const it = prop.stock[+el.dataset.i];
       if (it.consumable) return;
       const cur = p.gear[it.slot] || (it.slot === 'ring1' ? p.gear.ring2 : null);
-      el.addEventListener('mouseenter', () => this.showTip(el, this.itemTipHtml(it, cur)));
-      el.addEventListener('mouseleave', () => this.hideTip());
+      this.tipBind(el, () => this.itemTipHtml(it, cur));
     });
     pan.querySelectorAll('button.buy').forEach(b => b.addEventListener('click', () => {
       const i = +b.dataset.i;

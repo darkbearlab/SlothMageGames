@@ -97,6 +97,45 @@ Into the Breach 式戰棋：敵人攻擊全預告，核心是推撞（撞牆雙�
 - 全破後有「假下載完整版」的結局梗（純畫面演出，不會下載任何東西）
 - 測試：scratchpad/`pintest.js`（可解）、`pintrap.js`（陷阱）、`parktest.js`、`test-adtrap.js`（整合）
 
+## 手機瀏覽器適配盤點（2026-07-27）
+使用者要求：盤點哪幾款適合手機瀏覽器、在清單上加標籤、做適當改寫。
+
+### 標籤結論（寫在 content/games.md 與 content/projects.md）
+| 遊戲 | 標籤 | 理由 |
+|---|---|---|
+| ad-trap | 📱 手機優先 | 三種關卡全是直式＋純點擊，本來就在模仿手機廣告 |
+| sloth-idle | 📱 手機優先 | 純 DOM 清單、點一下買一個、有離線收益 |
+| sloth-deck | 📱 手機優先 | 手牌在 ≤760px 變成可橫捲的一列，回合制不限時 |
+| sloth-tactics | 📱 手機優先 | 棋盤自動縮放（ts = clamp(avail/N, 34, 92)），全程只有點 |
+| sloth-runes | 📱 手機可玩 | 24×14 地圖塞不進手機，靠拖曳平移＋新增的 ⛶ 全覽切換 |
+| sloth-factory | 📱 手機可玩 | 新增雙指縮放與 ＋／－ 鍵；大工廠仍是滑鼠舒服 |
+| sloth-abyss | 📱 手機可玩 | 唯一的即時動作遊戲；已補觸控按鍵，但大螢幕仍有優勢 |
+
+### 這次做的改寫
+- **sloth-abyss**
+  - `index.html`：新增 `#touchbtns`（⏸暫停／🎒背包／✋互動 三顆圓鈕），`body.touch` 才顯示
+  - `main.js`：`enterTouchMode()`（加 body.touch class）、`nearestEnemy(range)`、`nearestProp()`；
+    `useSkillSlot()` 在觸控時自動瞄準最近敵人；touchcancel 補上
+  - `ui.js`：`bindTouchButtons()`、`tipBind(el, htmlFn, onActivate)`＝滑鼠 hover ＋
+    觸控「第一下看說明、第二下才動作」；`updateHud()` 會依 `nearestProp()` 把互動鍵點亮並改字
+    （PROP_LABEL / PROP_ICON）；skillbar 加了法力藥水鍵 `#manaBtn`；背包標題加「✕ 關閉」
+  - `render.js`：`fkey()` — 提示文字在觸控時顯示 `[✋]` 而非 `[F]`
+- **sloth-factory**：`#zoomBtns`（＋／－）＋雙指 pinch zoom；`Input.markTouch()`；
+  手機上排列改精簡（隱藏 logo 與 #rate，否則會擠成直書）；「方向」卡片在觸控顯示「點我旋轉」
+- **sloth-runes**：`R.fitMode` ＋ `#btnFit`（⛶ 全覽／放大）切換整張地圖塞進畫面
+- **sloth-deck / sloth-idle / ad-trap**：把 26～29px 的小按鈕拉到 min-height 34px
+- **layouts/_default/baseof.html**：`img,iframe,video,embed{max-width:100%}`
+  （作品集頁的 itch.io iframe 原本在手機上撐出 182px 橫向捲動）
+
+### 驗證
+- `scratchpad/mobile-audit.js`：7 款用 iPhone 13 視窗跑，橫向溢出全 0、無 JS error、無 <32px 可點元素
+- `scratchpad/mobile-abyss.js`：觸控鍵→開背包→點物品看 tooltip→互動下樓→暫停，全數通過
+- `scratchpad/mobile-factory.js`：＋／－ 與雙指縮放都會改 `G.cam.zoom`，點格子仍能蓋
+- `scratchpad/m-runes.js`：全覽 scale 0.332 / 放大 0.620，切換後 canPan=false
+- `scratchpad/m-site.js`：Hugo 建置後 games 頁 7 個 .mnote ＋ 9 個 .mtag（2 圖例＋7 卡片），溢出 0
+- 桌機回歸：test-abyss / factory / runes / deck / tactics / idle / adtrap 全 ERRORS 0
+- 注意：node 要用 `NODE_PATH=/opt/node22/lib/node_modules`；hugo 執行檔在 `/tmp/hugo`
+
 ## 尚未做但可以做的（若還有時間）
 - 遊戲 7：物理／解謎類（例如彈射、繩索、重力）
 - 深淵輪迴：更多職業技能、詞綴、成就系統

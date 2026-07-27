@@ -28,8 +28,9 @@ description: "這裡陳列樹懶法師的作品。"
   <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#ffb066">樹懶法師：深淵輪迴</div>
   <div style="font-size:.9rem;color:#b8b0c8;line-height:1.7;margin-bottom:1rem">
     5 個職業、13 種怪物、30+ 天賦、5 位王、無盡模式。<br>
-    WASD 移動、滑鼠攻擊、Q/E/R 放技能；手機也能玩（按住畫面移動，自動攻擊）。
+    WASD 移動、滑鼠攻擊、Q/E/R 放技能。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(255,190,80,.14);border:1px solid rgba(255,190,80,.5);color:#ffcd7a">📱 手機可玩</span>　觸控：拖曳移動＋自動攻擊，HUD 右下有互動／背包／暫停鍵</div>
   <a href="/SlothMageGames/games/sloth-abyss/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#4a2c1c,#2c1a12);border:2px solid #8a5a2c;color:#ffd9a0;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}
@@ -47,6 +48,7 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
   <div style="font-size:.9rem;color:#b6c8cc;line-height:1.7;margin-bottom:1rem">
     7 種建築、13 種物品、8 項研究。<br>拖曳鋪輸送帶、R 旋轉方向、右鍵拆除，進度自動保存。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(255,190,80,.14);border:1px solid rgba(255,190,80,.5);color:#ffcd7a">📱 手機可玩</span>　觸控：點格子蓋、拖曳平移、雙指縮放（另有 ＋／－ 鍵）</div>
   <a href="/SlothMageGames/games/sloth-factory/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#1d4a3d,#123027);border:2px solid #2f8a6c;color:#a8ffdd;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}
@@ -64,6 +66,7 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
     火 ＋ 冰 ＝ 蒸汽　火 ＋ 雷 ＝ 熔雷　冰 ＋ 雷 ＝ 霜雷　三合一 ＝ 混沌<br>
     30 波戰役，撐過去還有無盡模式。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(255,190,80,.14);border:1px solid rgba(255,190,80,.5);color:#ffcd7a">📱 手機可玩</span>　觸控：拖曳平移，上排 ⛶ 可切「全覽整張地圖 / 放大好點」</div>
   <a href="/SlothMageGames/games/sloth-runes/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#412d68,#241a3c);border:2px solid #6a4a9c;color:#e0c0ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}
@@ -79,8 +82,9 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
   <div style="font-size:1.6rem;font-weight:900;margin:.3rem 0;color:#c48cff">樹懶法師：睡前牌局</div>
   <div style="font-size:.9rem;color:#c7bcd8;line-height:1.7;margin-bottom:1rem">
     40 張卡 · 16 件遺物 · 3 幕 39 個節點 · 進度自動保存<br>
-    純滑鼠操作，手機也能玩。
+    純滑鼠操作。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(80,220,140,.16);border:1px solid rgba(80,220,140,.55);color:#7fe6ac">📱 手機優先</span>　觸控：手牌排成可左右滑的一列，點卡再點目標</div>
   <a href="/SlothMageGames/games/sloth-deck/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#3d2a5e,#241839);border:2px solid #6a4a9c;color:#e0c0ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}
@@ -98,6 +102,7 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
     3 個單位 · 6 種怪物 · 8 種強化 · 無限任務<br>
     每回合都是一道有解的謎題，沒有隨機骰子。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(80,220,140,.16);border:1px solid rgba(80,220,140,.55);color:#7fe6ac">📱 手機優先</span>　觸控：棋盤自動縮放塞滿螢幕，全程只有「點」</div>
   <a href="/SlothMageGames/games/sloth-tactics/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#1e4a5c,#123240);border:2px solid #2f7a96;color:#bfe8ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}
@@ -116,6 +121,7 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
     關掉分頁它也會繼續跑（離線收益最多累積 8～24 小時）。<br>
     適合睡前打開，起床再回來看。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(80,220,140,.16);border:1px solid rgba(80,220,140,.55);color:#7fe6ac">📱 手機優先</span>　觸控：一串可下滑的清單，點一下買一個</div>
   <a href="/SlothMageGames/games/sloth-idle/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#2a3560,#161c34);border:2px solid #4a5a9c;color:#c0d4ff;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}
@@ -134,6 +140,7 @@ Factorio 式的網頁自動化生產遊戲。挖礦機、輸送帶、熔爐、�
     拔針救法師（物理）· 停車場大逃殺（邏輯）· 選對道具救法師（選擇題）<br>
     每一關都經過自動求解驗證，保證有解。
   </div>
+  <div style="margin-bottom:1rem;font-size:.78rem;color:#9a92aa"><span style="font-size:.72rem;font-weight:700;border-radius:20px;padding:.15rem .7rem;background:rgba(80,220,140,.16);border:1px solid rgba(80,220,140,.55);color:#7fe6ac">📱 手機優先</span>　觸控：三種關卡都是直式版面、全部用點的</div>
   <a href="/SlothMageGames/games/ad-trap/" style="display:inline-block;padding:.7rem 1.6rem;border-radius:8px;background:linear-gradient(180deg,#4a3410,#2c1f08);border:2px solid #8a6a2c;color:#ffd9a0;font-weight:700;letter-spacing:1px">▶ 立即遊玩</a>
 </div>
 {{< /rawhtml >}}

@@ -110,10 +110,28 @@ button.mini:hover{border-color:var(--acc);color:var(--acc)}
   background:linear-gradient(180deg,#1d4a3d,#123027);border:1px solid #2f8a6c;color:#a8ffdd;
   font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:inherit}
 .bigbtn:hover{border-color:var(--acc);color:#fff}
+/* 觸控縮放鍵（手機沒有滾輪） */
+#zoomBtns{position:fixed;right:10px;top:50%;transform:translateY(-50%);display:none;
+  flex-direction:column;gap:8px;z-index:11}
+body.touch #zoomBtns{display:flex}
+.zbtn{width:46px;height:46px;border:1px solid var(--line);border-radius:50%;
+  background:rgba(14,22,26,.92);color:#cfe8e0;font-size:20px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.5);user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent}
+.zbtn:active{background:#16292a;border-color:var(--acc)}
+
 @media (max-width:820px){
   #quest{display:none}
   .side{width:calc(100vw - 24px)}
   .bcard{width:74px}
+  #zoomBtns{top:auto;bottom:150px;transform:none}
+  /* 上排在窄螢幕會擠成直書，改成精簡版 */
+  #top{gap:8px;padding:0 8px;font-size:13px}
+  #top .logo{display:none}
+  #rate{display:none}
+  #top button{padding:8px 10px;font-size:12px;min-height:34px}
+  #top .stat{gap:3px}
 }
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:#0e1316}
@@ -136,6 +154,10 @@ button.mini:hover{border-color:var(--acc);color:var(--acc)}
 </div>
 
 <div id="quest"><h4>目標</h4><div id="questList"></div></div>
+<div id="zoomBtns">
+  <div class="zbtn" id="zIn">＋</div>
+  <div class="zbtn" id="zOut">－</div>
+</div>
 <div id="build"></div>
 <div id="toasts"></div>
 <div id="tip" class="hidden"></div>
